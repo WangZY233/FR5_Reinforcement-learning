@@ -1,0 +1,814 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <link
+    name="imu_neck_roll">
+    <inertial>
+      <origin
+        xyz="-8.1172E-05 -0.0081752 -0.0015324"
+        rpy="0 0 0" />
+      <mass
+        value="0.002172" />
+      <inertia
+        ixx="2.8199E-07"
+        ixy="2.179E-09"
+        ixz="-3.6711E-17"
+        iyy="3.1945E-07"
+        iyz="-1.2201E-14"
+        izz="6.0088E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/visual/imu_neck_roll.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/collision/imu_neck_roll.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="imu_neck_roll_fixedjoint"
+    type="fixed">
+    <origin
+      xyz="-0.063224 0.011262 0.0086812"
+      rpy="1.5708 0.19296 3.1416" />
+    <parent
+      link="neck_pitch_link" />
+    <child
+      link="imu_neck_roll" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="imu_neck_pitch">
+    <inertial>
+      <origin
+        xyz="0.00016632 0.01619 -0.0017198"
+        rpy="0 0 0" />
+      <mass
+        value="0.0034346" />
+      <inertia
+        ixx="6.9718E-07"
+        ixy="-8.4227E-09"
+        ixz="5.0008E-16"
+        iyy="5.0739E-07"
+        iyz="3.0309E-14"
+        izz="1.2031E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/visual/imu_neck_pitch.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/collision/imu_neck_pitch.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="imu_neck_pitch_fixedjoint"
+    type="fixed">
+    <origin
+      xyz="0 -0.020284 0.021514"
+      rpy="1.5708 0 0" />
+    <parent
+      link="neck_yaw_link" />
+    <child
+      link="imu_neck_pitch" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+   <link
+    name="imu_left_elbow_pitch">
+    <inertial>
+      <origin
+        xyz="-0.00016632 -0.01619 -0.0017198"
+        rpy="0 0 0" />
+      <mass
+        value="0.0034346" />
+      <inertia
+        ixx="6.9718E-07"
+        ixy="-8.4227E-09"
+        ixz="-4.9974E-16"
+        iyy="5.0739E-07"
+        iyz="-3.0309E-14"
+        izz="1.2031E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/visual/imu_left_elbow_pitch.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/collision/imu_left_elbow_pitch.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="imu_left_elbow_pitch_fixedjoint"
+    type="fixed">
+    <origin
+      xyz="1.0968E-05 -0.020284 -0.020114"
+      rpy="1.5708 0 0" />
+    <parent
+      link="left_elbow_yaw_link" />
+    <child
+      link="imu_left_elbow_pitch" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="imu_left_elbow_yaw">
+    <inertial>
+      <origin
+        xyz="8.1172E-05 0.0081752 -0.0015324"
+        rpy="0 0 0" />
+      <mass
+        value="0.002172" />
+      <inertia
+        ixx="2.8199E-07"
+        ixy="2.179E-09"
+        ixz="3.6464E-17"
+        iyy="3.1945E-07"
+        iyz="1.2202E-14"
+        izz="6.0088E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/visual/imu_left_elbow_yaw.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/collision/imu_left_elbow_yaw.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="imu_left_elbow_yaw_fixedjoint"
+    type="fixed">
+    <origin
+      xyz="-0.045881 0.08346 0.0017238"
+      rpy="-1.5708 1.3778 3.1416" />
+    <parent
+      link="left_shoulder_roll_link" />
+    <child
+      link="imu_left_elbow_yaw" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="imu_left_shoulder_roll">
+    <inertial>
+      <origin
+        xyz="8.9519E-06 -7.0659E-06 -0.00042786"
+        rpy="0 0 0" />
+      <mass
+        value="6.4142E-06" />
+      <inertia
+        ixx="3.7314E-12"
+        ixy="-4.2532E-16"
+        ixz="1.3184E-16"
+        iyy="5.2038E-12"
+        iyz="-9.9707E-17"
+        izz="8.1522E-12" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/visual/imu_left_shoulder_roll.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/collision/imu_left_shoulder_roll.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="imu_left_shoulder_roll_fixedjoint"
+    type="fixed">
+    <origin
+      xyz="6.0359E-05 -0.016508 0.073444"
+      rpy="1.5708 0 0" />
+    <parent
+      link="left_shoulder_pitch_link" />
+    <child
+      link="imu_left_shoulder_roll" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="imu_right_elbow_pitch">
+    <inertial>
+      <origin
+        xyz="-0.00016632 -0.01619 -0.0017198"
+        rpy="0 0 0" />
+      <mass
+        value="0.0034346" />
+      <inertia
+        ixx="6.9718E-07"
+        ixy="-8.4227E-09"
+        ixz="-4.9973E-16"
+        iyy="5.0739E-07"
+        iyz="-3.0309E-14"
+        izz="1.2031E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/visual/imu_right_elbow_pitch.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/collision/imu_right_elbow_pitch.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="imu_right_elbow_pitch_fixedjoint"
+    type="fixed">
+    <origin
+      xyz="0 0.020284 -0.020114"
+      rpy="1.5708 0 3.1416" />
+    <parent
+      link="right_elbow_yaw_link" />
+    <child
+      link="imu_right_elbow_pitch" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="imu_right_elbow_yaw">
+    <inertial>
+      <origin
+        xyz="-8.1172E-05 -0.0081752 -0.0015324"
+        rpy="0 0 0" />
+      <mass
+        value="0.002172" />
+      <inertia
+        ixx="2.8199E-07"
+        ixy="2.179E-09"
+        ixz="-3.6498E-17"
+        iyy="3.1945E-07"
+        iyz="-1.2202E-14"
+        izz="6.0088E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/visual/imu_right_elbow_yaw.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/collision/imu_right_elbow_yaw.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="imu_right_elbow_yaw_fixedjoint"
+    type="fixed">
+    <origin
+      xyz="0.028547 0.08345 0.0017224"
+      rpy="1.5708 -1.3778 0" />
+    <parent
+      link="right_shoulder_roll_link" />
+    <child
+      link="imu_right_elbow_yaw" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="imu_right_shoulder_roll">
+    <inertial>
+      <origin
+        xyz="8.9519E-06 -7.0658E-06 -0.00042786"
+        rpy="0 0 0" />
+      <mass
+        value="6.4142E-06" />
+      <inertia
+        ixx="3.7314E-12"
+        ixy="-4.2546E-16"
+        ixz="1.3183E-16"
+        iyy="5.2038E-12"
+        iyz="-9.9839E-17"
+        izz="8.1522E-12" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/visual/imu_right_shoulder_roll.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/collision/imu_right_shoulder_roll.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="imu_right_shoulder_roll_fixedjoint"
+    type="fixed">
+    <origin
+      xyz="0.00012821 -0.016508 -0.073444"
+      rpy="-1.5708 0 3.1416" />
+    <parent
+      link="right_shoulder_pitch_link" />
+    <child
+      link="imu_right_shoulder_roll" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="imu_neck_yaw">
+    <inertial>
+      <origin
+        xyz="-8.1172E-05 -0.0081752 -0.0015324"
+        rpy="0 0 0" />
+      <mass
+        value="0.002172" />
+      <inertia
+        ixx="2.8199E-07"
+        ixy="2.179E-09"
+        ixz="-3.649E-17"
+        iyy="3.1945E-07"
+        iyz="-1.2202E-14"
+        izz="6.0088E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/visual/imu_neck_yaw.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/collision/imu_neck_yaw.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="imu_neck_yaw_fixedjoint"
+    type="fixed">
+    <origin
+      xyz="0.0017147 -0.27856 -0.047068"
+      rpy="1.5708 0.19197 0" />
+    <parent
+      link="lumbar_roll_link" />
+    <child
+      link="imu_neck_yaw" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="imu_left_shoulder_pitch">
+    <inertial>
+      <origin
+        xyz="-8.9519E-06 7.0659E-06 -0.00042786"
+        rpy="0 0 0" />
+      <mass
+        value="6.4142E-06" />
+      <inertia
+        ixx="3.7314E-12"
+        ixy="-4.2554E-16"
+        ixz="-1.3193E-16"
+        iyy="5.2038E-12"
+        iyz="9.9763E-17"
+        izz="8.1522E-12" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/visual/imu_left_shoulder_pitch.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/collision/imu_left_shoulder_pitch.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="imu_left_shoulder_pitch_fixedjoint"
+    type="fixed">
+    <origin
+      xyz="-0.073555 -0.13528 0.0064338"
+      rpy="1.5708 -1.309 -1.2217" />
+    <parent
+      link="lumbar_roll_link" />
+    <child
+      link="imu_left_shoulder_pitch" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="imu_right_shoulder_pitch">
+    <inertial>
+      <origin
+        xyz="8.9518E-06 -7.0658E-06 -0.00042786"
+        rpy="0 0 0" />
+      <mass
+        value="6.4142E-06" />
+      <inertia
+        ixx="3.7314E-12"
+        ixy="-4.2568E-16"
+        ixz="1.3201E-16"
+        iyy="5.2038E-12"
+        iyz="-9.9892E-17"
+        izz="8.1522E-12" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/visual/imu_right_shoulder_pitch.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/collision/imu_right_shoulder_pitch.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="imu_right_shoulder_pitch_fixedjoint"
+    type="fixed">
+    <origin
+      xyz="0.073561 -0.13527 0.0063691"
+      rpy="-1.5708 -1.309 -1.9199" />
+    <parent
+      link="lumbar_roll_link" />
+    <child
+      link="imu_right_shoulder_pitch" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="imu_lumbar_roll">
+    <inertial>
+      <origin
+        xyz="-8.9519E-06 -7.0658E-06 0.00042786"
+        rpy="0 0 0" />
+      <mass
+        value="6.4142E-06" />
+      <inertia
+        ixx="3.7314E-12"
+        ixy="4.2549E-16"
+        ixz="1.3184E-16"
+        iyy="5.2038E-12"
+        iyz="9.9819E-17"
+        izz="8.1522E-12" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/visual/imu_lumbar_roll.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/collision/imu_lumbar_roll.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="imu_lumbar_roll_fixedjoint"
+    type="fixed">
+    <origin
+      xyz="-0.20242 -0.023758 3.3508E-05"
+      rpy="1.5708 -1.5708 -3.1416" />
+    <parent
+      link="lumbar_pitch_Link" />
+    <child
+      link="imu_lumbar_roll" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="imu_lumbar_pitch">
+    <inertial>
+      <origin
+        xyz="-7.0658E-06 8.9519E-06 0.00042786"
+        rpy="0 0 0" />
+      <mass
+        value="6.4142E-06" />
+      <inertia
+        ixx="5.2038E-12"
+        ixy="-4.2563E-16"
+        ixz="9.9911E-17"
+        iyy="3.7314E-12"
+        iyz="-1.3196E-16"
+        izz="8.1522E-12" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/visual/imu_lumbar_pitch.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/collision/imu_lumbar_pitch.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="imu_lumbar_pitch_fixedjoint"
+    type="fixed">
+    <origin
+      xyz="0.012523 0.018509 -6.6383E-05"
+      rpy="-1.5708 0 3.1416" />
+    <parent
+      link="lumbar_yaw_link" />
+    <child
+      link="imu_lumbar_pitch" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="imu_lumbar_yaw">
+    <inertial>
+      <origin
+        xyz="8.9519E-06 -7.0658E-06 -0.00042786"
+        rpy="0 0 0" />
+      <mass
+        value="6.4142E-06" />
+      <inertia
+        ixx="3.7314E-12"
+        ixy="-4.2553E-16"
+        ixz="1.3198E-16"
+        iyy="5.2038E-12"
+        iyz="-9.9857E-17"
+        izz="8.1522E-12" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/visual/imu_lumbar_yaw.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/collision/imu_lumbar_yaw.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="imu_lumbar_yaw_fixedjoint"
+    type="fixed">
+    <origin
+      xyz="0.012503 -0.23623 3.4014E-05"
+      rpy="1.5707 1.5708 -3.1416" />
+    <parent
+      link="knee_link" />
+    <child
+      link="imu_lumbar_yaw" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="imu_knee">
+    <inertial>
+      <origin
+        xyz="-8.952E-06 7.0659E-06 -0.00042786"
+        rpy="0 0 0" />
+      <mass
+        value="6.4142E-06" />
+      <inertia
+        ixx="3.7314E-12"
+        ixy="-4.2516E-16"
+        ixz="-1.3164E-16"
+        iyy="5.2038E-12"
+        iyz="9.9662E-17"
+        izz="8.1522E-12" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/visual/imu_knee.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ginger_description/meshes/collision/imu_knee.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="imu_knee_fixedjoint"
+    type="fixed">
+    <origin
+      xyz="-0.00041237 0.017458 0.2507"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="imu_knee" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="imu_chassis">
+  </link>
+  <joint
+    name="imu_chassis_fixedjoint"
+    type="fixed">
+    <origin
+      xyz="-0.0070212 0.11284 0.273"
+      rpy="0 0 0" />
+    <parent
+      link="base_footprint" />
+    <child
+      link="imu_chassis" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+</robot>

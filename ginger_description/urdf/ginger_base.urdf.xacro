@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<link name="base_footprint">
+		<!--
+		inertial>
+		<origin
+		xyz="-0.0005979 0.00044833 0.06344"
+		rpy="0 0 0" />
+		<mass
+		value="0.57513" />
+		<inertia
+		ixx="0.0077053"
+		ixy="1.075E-05"
+		ixz="0.00013632"
+		iyy="0.0074663"
+		iyz="-2.5881E-06"
+		izz="0.014845" />
+		</inertial
+		-->
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/base_footprint.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/base_footprint.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<link name="base_link">
+		<inertial>
+			<origin xyz="-0.00055154 0.00095133 0.1361" rpy="0 0 0" />
+			<mass value="30.009" />
+			<inertia ixx="0.041932" ixy="8.313E-05" ixz="-0.00017454" iyy="0.024745" iyz="-5.7341E-05" izz="0.059952" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/base_link.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/base_link.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="base_link_fixedjoint" type="fixed">
+		<origin xyz="0 0 0.059449" rpy="0 0 0" />
+		<parent link="base_footprint" />
+		<child link="base_link" />
+		<axis xyz="0 0 0" />
+	</joint>
+</robot>

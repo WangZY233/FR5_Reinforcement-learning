@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<xacro:arg name="use_nominal_extrinsics" default="true" />
+	<xacro:include filename="$(find ginger_description)/urdf/_d455.urdf.xacro" />
+
+	<xacro:sensor_d455 parent="neck_roll_link" name="bowknot_camera" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+		<!-- <origin xyz="0.0115 -0.12897 0.12008" rpy="0 -1.3614 1.5708" /> -->
+		<origin xyz="0 -0.11707 0.1062" rpy="0 -1.3614 1.5708" />
+	</xacro:sensor_d455>
+</robot>

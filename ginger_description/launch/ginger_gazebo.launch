@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+	<include file="$(find gazebo_ros)/launch/empty_world.launch" />
+	<group ns="ginger">
+		<node name="tf_footprint_base" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 base_link base_footprint 40" />
+		<!-- Load the URDF into the ROS Parameter Server -->
+		<param name="robot_description" command="$(find xacro)/xacro '$(find ginger_description)/urdf/ginger_sim.urdf.xacro'" />
+		<node name="spawn_model" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model rrbot -param robot_description" />
+		<!-- Load joint controller configurations from YAML file to parameter server -->
+		<rosparam file="$(find ginger_moveit_config)/config/ros_controllers.yaml" command="load" />
+		<!-- load the controllers -->
+		<node name="controller_spawner" pkg="controller_focus_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller" />
+		<!-- convert joint states to TF transforms for rviz, etc -->
+		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+			<remap from="/joint_states" to="/joint_states" />
+		</node>
+	</group>
+</launch>

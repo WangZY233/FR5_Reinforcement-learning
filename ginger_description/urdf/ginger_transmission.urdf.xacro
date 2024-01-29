@@ -1,0 +1,1007 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<transmission name="trans_left_front_wheel">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="left_front_wheel">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="left_front_wheel_actuator">
+			<mechanicalReduction>
+				36
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.95
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				2.1816
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_right_front_wheel">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="right_front_wheel">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="right_front_wheel_actuator">
+			<mechanicalReduction>
+				36
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.95
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				2.1816
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_back_wheel">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="back_wheel">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="back_wheel_actuator">
+			<mechanicalReduction>
+				36
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.95
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				2.1816
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_knee">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="knee">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="knee_actuator">
+			<mechanicalReduction>
+				121
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.75
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				1.0
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_lumbar_yaw">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="lumbar_yaw">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="lumbar_yaw_actuator">
+			<mechanicalReduction>
+				-81
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.75
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				1.0
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_lumbar_pitch">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="lumbar_pitch">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="lumbar_pitch_actuator">
+			<mechanicalReduction>
+				81
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.75
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				1.0
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_lumbar_roll">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="lumbar_roll">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="lumbar_roll_actuator">
+			<mechanicalReduction>
+				-81
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.75
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				1.0
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_neck_yaw">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="neck_yaw">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="neck_yaw_actuator">
+			<mechanicalReduction>
+				36
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.94
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				0.0348
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_neck_pitch">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="neck_pitch">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="neck_pitch_actuator">
+			<mechanicalReduction>
+				36
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.94
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				0.0348
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_neck_roll">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="neck_roll">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="neck_roll_actuator">
+			<mechanicalReduction>
+				-36
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.94
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				0.0348
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_left_shoulder_pitch">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="left_shoulder_pitch">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="left_shoulder_pitch_actuator">
+			<mechanicalReduction>
+				36
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.94
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				0.0606
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_left_shoulder_roll">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="left_shoulder_roll">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="left_shoulder_roll_actuator">
+			<mechanicalReduction>
+				36
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.94
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				0.0606
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_left_elbow_yaw">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="left_elbow_yaw">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="left_elbow_yaw_actuator">
+			<mechanicalReduction>
+				36
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.94
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				0.0348
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_left_elbow_pitch">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="left_elbow_pitch">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="left_elbow_pitch_actuator">
+			<mechanicalReduction>
+				36
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.94
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				0.0348
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_left_wrist_yaw">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="left_wrist_yaw">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="left_wrist_yaw_actuator">
+			<mechanicalReduction>
+				36
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.94
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				0.0348
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_diff_left_wrist">
+		<type>
+			transmission_interface/CloudRobotDiffTransmission
+		</type>
+		<joint name="left_wrist_roll">
+			<role>
+				joint1
+			</role>
+			<mechanicalReduction>
+				1
+			</mechanicalReduction>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<joint name="left_wrist_pitch">
+			<role>
+				joint2
+			</role>
+			<mechanicalReduction>
+				1
+			</mechanicalReduction>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="left_wrist_r_actuator">
+			<role>
+				actuator2
+			</role>
+			<mechanicalReduction>
+				39.124
+			</mechanicalReduction>
+			<torqueCoefficiency>
+				0.0317
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+		<actuator name="left_wrist_l_actuator">
+			<role>
+				actuator1
+			</role>
+			<mechanicalReduction>
+				39.124
+			</mechanicalReduction>
+			<torqueCoefficiency>
+				0.0317
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_left_thumb">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="left_thumb">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="left_thumb_actuator">
+			<mechanicalReduction>
+				-1
+			</mechanicalReduction>
+			<torqueCoefficiency>
+				0.015
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_left_index">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="left_index">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="left_index_actuator">
+			<mechanicalReduction>
+				-1
+			</mechanicalReduction>
+			<torqueCoefficiency>
+				0.015
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_left_middle">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="left_middle">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="left_middle_actuator">
+			<mechanicalReduction>
+				-1
+			</mechanicalReduction>
+			<torqueCoefficiency>
+				0.015
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_left_ring">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="left_ring">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="left_ring_actuator">
+			<mechanicalReduction>
+				-1
+			</mechanicalReduction>
+			<torqueCoefficiency>
+				0.015
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_left_pinky">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="left_pinky">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="left_pinky_actuator">
+			<mechanicalReduction>
+				-1
+			</mechanicalReduction>
+			<torqueCoefficiency>
+				0.015
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_right_shoulder_pitch">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="right_shoulder_pitch">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="right_shoulder_pitch_actuator">
+			<mechanicalReduction>
+				-36
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.94
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				0.0606
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_right_shoulder_roll">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="right_shoulder_roll">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="right_shoulder_roll_actuator">
+			<mechanicalReduction>
+				36
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.94
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				0.0606
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_right_elbow_yaw">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="right_elbow_yaw">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="right_elbow_yaw_actuator">
+			<mechanicalReduction>
+				36
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.94
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				0.0348
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_right_elbow_pitch">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="right_elbow_pitch">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="right_elbow_pitch_actuator">
+			<mechanicalReduction>
+				-36
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.94
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				0.0348
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_right_wrist_yaw">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="right_wrist_yaw">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="right_wrist_yaw_actuator">
+			<mechanicalReduction>
+				36
+			</mechanicalReduction>
+			<mechanicalEfficiency>
+				0.94
+			</mechanicalEfficiency>
+			<torqueCoefficiency>
+				0.0348
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+    </transmission>
+    <transmission name="trans_diff_right_wrist">
+		<type>
+			transmission_interface/CloudRobotDiffTransmission
+		</type>
+		<joint name="right_wrist_roll">
+			<role>
+				joint2
+			</role>
+			<mechanicalReduction>
+				1
+			</mechanicalReduction>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<joint name="right_wrist_pitch">
+			<role>
+				joint1
+			</role>
+			<mechanicalReduction>
+				1
+			</mechanicalReduction>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="right_wrist_l_actuator">
+			<role>
+				actuator2
+			</role>
+			<mechanicalReduction>
+				39.124
+			</mechanicalReduction>
+			<torqueCoefficiency>
+				0.0317
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+		<actuator name="right_wrist_r_actuator">
+			<role>
+				actuator1
+			</role>
+			<mechanicalReduction>
+				39.124
+			</mechanicalReduction>
+			<torqueCoefficiency>
+				0.0317
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+    </transmission>
+	<transmission name="trans_right_thumb">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="right_thumb">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="right_thumb_actuator">
+			<mechanicalReduction>
+				1
+			</mechanicalReduction>
+			<torqueCoefficiency>
+				0.015
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_right_index">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="right_index">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="right_index_actuator">
+			<mechanicalReduction>
+				1
+			</mechanicalReduction>
+			<torqueCoefficiency>
+				0.015
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_right_middle">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="right_middle">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="right_middle_actuator">
+			<mechanicalReduction>
+				1
+			</mechanicalReduction>
+			<torqueCoefficiency>
+				0.015
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_right_ring">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="right_ring">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="right_ring_actuator">
+			<mechanicalReduction>
+				1
+			</mechanicalReduction>
+			<torqueCoefficiency>
+				0.015
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+	<transmission name="trans_right_pinky">
+		<type>
+			transmission_interface/CloudRobotTransmission
+		</type>
+		<joint name="right_pinky">
+			<hardwareInterface>
+				hardware_interface/BiDirectionalPositionJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalVelocityJointInterface
+			</hardwareInterface>
+			<hardwareInterface>
+				hardware_interface/BiDirectionalEffortJointInterface
+			</hardwareInterface>
+		</joint>
+		<actuator name="right_pinky_actuator">
+			<mechanicalReduction>
+				1
+			</mechanicalReduction>
+			<torqueCoefficiency>
+				0.015
+			</torqueCoefficiency>
+			<speedUnit>
+				RPM
+			</speedUnit>
+		</actuator>
+	</transmission>
+</robot>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="ginger">
+	<xacro:include filename="$(find ginger_description)/urdf/ginger_base.urdf.xacro" />
+	<xacro:include filename="$(find ginger_description)/urdf/ginger_chassis.urdf.xacro" />
+	<xacro:include filename="$(find ginger_description)/urdf/ginger_trunk.urdf.xacro" />
+	<xacro:include filename="$(find ginger_description)/urdf/ginger_head.urdf.xacro" />
+	<xacro:include filename="$(find ginger_description)/urdf/ginger_left_arm.urdf.xacro" />
+	<xacro:include filename="$(find ginger_description)/urdf/ginger_left_hand.urdf.xacro" />
+	<xacro:include filename="$(find ginger_description)/urdf/ginger_right_arm.urdf.xacro" />
+	<xacro:include filename="$(find ginger_description)/urdf/ginger_right_hand.urdf.xacro" />
+	<xacro:include filename="$(find ginger_description)/urdf/ginger_sensors.urdf.xacro" />
+	<xacro:include filename="$(find ginger_description)/urdf/ginger_imu.urdf.xacro" />
+	<xacro:include filename="$(find ginger_description)/urdf/ginger_bowknot_camera.urdf.xacro" />
+	<xacro:include filename="$(find ginger_description)/urdf/ginger_transmission.urdf.xacro" />
+</robot>

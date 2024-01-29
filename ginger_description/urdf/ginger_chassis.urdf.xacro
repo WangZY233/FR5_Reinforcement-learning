@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<link name="right_front_wheel_link">
+		<inertial>
+			<origin xyz="-6.4777E-07 -3.4934E-09 0.022026" rpy="0 0 0" />
+			<mass value="0.37125" />
+			<inertia ixx="0.00039757" ixy="-2.1114E-11" ixz="-3.0376E-09" iyy="0.00039757" iyz="-2.1295E-10" izz="0.00075526" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/right_front_wheel_link.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/right_front_wheel_link.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="right_front_wheel" type="continuous">
+		<origin xyz="0.13222 -0.22999 0.020321" rpy="-1.5709 0 0.5236" />
+		<parent link="base_link" />
+		<child link="right_front_wheel_link" />
+		<axis xyz="0 0 1" />
+	</joint>
+	<link name="back_wheel_link">
+		<inertial>
+			<origin xyz="-4.1125E-09 2.3182E-09 0.022027" rpy="0 0 0" />
+			<mass value="0.37126" />
+			<inertia ixx="0.00039758" ixy="1.6109E-10" ixz="-4.7377E-10" iyy="0.00039758" iyz="-1.4344E-10" izz="0.00075527" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/back_wheel_link.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/back_wheel_link.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="back_wheel" type="continuous">
+		<origin xyz="-0.266033477738214 -6.55253375901002E-05 0.0202866273668335" rpy="-1.57074310974122 0 -1.57079068135099" />
+		<parent link="base_link" />
+		<child link="back_wheel_link" />
+		<axis xyz="0 0 1" />
+	</joint>
+	<link name="left_front_wheel_link">
+		<inertial>
+			<origin xyz="6.3784E-07 6.4809E-08 0.022027" rpy="0 0 0" />
+			<mass value="0.37126" />
+			<inertia ixx="0.00039757" ixy="1.9683E-10" ixz="2.217E-09" iyy="0.00039757" iyz="-1.2115E-10" izz="0.00075526" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/left_front_wheel_link.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/left_front_wheel_link.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="left_front_wheel" type="continuous">
+		<origin xyz="0.132215224324233 0.229866467297895 0.0202948891163681" rpy="-1.57077422744194 0 2.61799952111885" />
+		<parent link="base_link" />
+		<child link="left_front_wheel_link" />
+		<axis xyz="0 0 1" />
+	</joint>
+</robot>

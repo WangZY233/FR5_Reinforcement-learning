@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<link name="head_camera_frame">
+		<inertial>
+			<origin xyz="-0.065973 -2.4897E-06 0.023235" rpy="0 0 0" />
+			<mass value="0.052152" />
+			<inertia ixx="0.00014437" ixy="2.5696E-08" ixz="1.2708E-05" iyy="0.00011662" iyz="1.0514E-09" izz="0.00024645" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/head_camera_frame.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/head_camera_frame.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="head_camera_frame_fixedjoint" type="fixed">
+		<origin xyz="0 -0.1008 0.10524" rpy="1.5708 -1.5708 0" />
+		<parent link="neck_roll_link" />
+		<child link="head_camera_frame" />
+		<axis xyz="0 0 0" />
+	</joint>
+	<link name="head_camera_optical_frame">
+		<inertial>
+			<origin xyz="2.6586E-06 -0.027275 -0.06898" rpy="0 0 0" />
+			<mass value="0.048746" />
+			<inertia ixx="0.00011574" ixy="1.0513E-09" ixz="-2.5696E-08" iyy="0.00024563" iyz="-1.3038E-05" izz="0.00014371" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/head_camera_optical_frame.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/head_camera_optical_frame.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="head_camera_optical_frame_fixedjoint" type="fixed">
+		<origin xyz="0 0 0" rpy="-1.5708 0 -1.5708" />
+		<parent link="head_camera_frame" />
+		<child link="head_camera_optical_frame" />
+		<axis xyz="0 0 0" />
+	</joint>
+	<link name="bowknot_camera_frame">
+    	<inertial>
+      		<origin xyz="-0.11733 0.011492 -0.053649" rpy="0 0 0" />
+      		<mass value="0.16494" />
+      		<inertia ixx="0.00045484" ixy="4.8128E-07" ixz="-5.6065E-06" iyy="0.00022553" iyz="-1.8311E-08" izz="0.00048512" />
+    	</inertial>
+    	<visual>
+      		<origin xyz="0 0 0" rpy="0 0 0" />
+      		<geometry>
+        		<mesh filename="package://ginger_description/meshes/visual/bowknot_camera_frame.STL" />
+      		</geometry>
+      		<material name="">
+        		<color rgba="1 1 1 1" />
+      		</material>
+    	</visual>
+    	<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+      		<geometry>
+        		<mesh filename="package://ginger_description/meshes/collision/bowknot_camera_frame.STL" />
+      		</geometry>
+    	</collision>
+  	</link>
+  	<joint name="bowknot_camera_frame_fixedjoint" type="fixed">
+    	<origin xyz="0.0115 -0.12897 0.12008" rpy="0 -1.3614 1.5708" />
+   		<parent link="neck_roll_link" />
+    	<child link="bowknot_camera_frame" />
+    	<axis xyz="0 0 0" />
+  	</joint>
+  	<link name="bowknot_camera_optical_frame">
+    	<inertial>
+      		<origin xyz="-0.014343 0.00086281 -0.015621" rpy="0 0 0" />
+      		<mass value="0.0034224" />
+      		<inertia ixx="1.2143E-07" ixy="1.7466E-08" ixz="-2.4421E-11" iyy="4.6615E-06" iyz="2.0312E-10" izz="4.7774E-06" />
+    	</inertial>
+    	<visual>
+      		<origin xyz="0 0 0" rpy="0 0 0" />
+      		<geometry>
+        		<mesh filename="package://ginger_description/meshes/visual/bowknot_camera_optical_frame.STL" />
+      		</geometry>
+      		<material name="">
+        		<color rgba="1 1 1 1" />
+     		</material>
+    	</visual>
+    	<collision>
+      		<origin xyz="0 0 0" rpy="0 0 0" />
+      		<geometry>
+        		<mesh filename="package://ginger_description/meshes/collision/bowknot_camera_optical_frame.STL" />
+      		</geometry>
+    	</collision>
+    </link>
+    <joint name="bowknot_camera_optical_frame_fixedjoint" type="fixed">
+    	<origin xyz="0 0 0" rpy="-1.5708 0 -1.5708" />
+    	<parent link="bowknot_camera_frame" />
+    	<child link="bowknot_camera_optical_frame" />
+    	<axis xyz="0 0 0" />
+    </joint>
+	<link name="lidar_2d_front">
+		<inertial>
+			<origin xyz="-2.3937 -2.4833 1.6565" rpy="0 0 0" />
+			<mass value="0.0049033" />
+			<inertia ixx="3.0076E-07" ixy="-3.1696E-09" ixz="2.1163E-09" iyy="3.0926E-07" iyz="3.6969E-08" izz="4.3066E-07" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/lidar_2d_front.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/lidar_2d_front.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="lidar_2d_front_fixedjoint" type="fixed">
+		<origin xyz="0.087625 -0.00018294 0.22002" rpy="0 0 0" />
+		<parent link="base_link" />
+		<child link="lidar_2d_front" />
+		<axis xyz="0 0 0" />
+	</joint>
+	<link name="sonar_frame">
+		<inertial>
+			<origin xyz="2.7715E-05 -0.0018444 -0.011201" rpy="0 0 0" />
+			<mass value="0.0049033" />
+			<inertia ixx="3.0076E-07" ixy="-3.1696E-09" ixz="2.1163E-09" iyy="3.0926E-07" iyz="3.6969E-08" izz="4.3066E-07" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/sonar_frame.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/sonar_frame.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="sonar_fixedjoint" type="fixed">
+		<origin xyz="0.088019 -2.7923E-05 0.28468" rpy="0 0 0" />
+		<parent link="base_link" />
+		<child link="sonar_frame" />
+		<axis xyz="0 0 0" />
+	</joint>
+	<link name="supernode_frame">
+	</link>
+	<joint name="supernode_frame_fixedjoint" type="fixed">
+		<origin xyz="-0.0542 -0.039299 0.071301" rpy="1.5708 -1.5708 0" />
+		<parent link="neck_roll_link" />
+		<child link="supernode_frame" />
+		<axis xyz="0 0 0" />
+	</joint>
+	<link name="supernode_optical_frame">
+	</link>
+	<joint name="supernode_optical_frame_fixedjoint" type="fixed">
+		<origin xyz="0 0 0" rpy="-1.5708 0 -1.5708" />
+		<parent link="supernode_frame" />
+		<child link="supernode_optical_frame" />
+		<axis xyz="0 0 0" />
+	</joint>
+	<link name="waist_camera_frame">
+	</link>
+	<joint name="waist_camera_frame_fixedjoint" type="fixed">
+		<origin xyz="0.115 -0.02 0.762" rpy="0 0 0" />
+		<parent link="base_footprint" />
+		<child link="waist_camera_frame" />
+		<axis xyz="0 0 0" />
+	</joint>
+	<link name="waist_camera_depth_frame">
+	</link>
+	<joint name="waist_camera_depth_frame_fixedjoint" type="fixed">
+		<origin xyz="0 0.02 0" rpy="0 0 0" />
+		<parent link="waist_camera_frame" />
+		<child link="waist_camera_depth_frame" />
+		<axis xyz="0 0 0" />
+	</joint>
+	<link name="waist_camera_color_frame">
+	</link>
+	<joint name="waist_camera_color_frame_fixedjoint" type="fixed">
+		<origin xyz="0 0.045 0" rpy="0 0 0" />
+		<parent link="waist_camera_frame" />
+		<child link="waist_camera_color_frame" />
+		<axis xyz="0 0 0" />
+	</joint>
+	<link name="waist_camera_depth_optical_frame">
+	</link>
+	<joint name="waist_camera_depth_optical_frame_fixedjoint" type="fixed">
+		<origin xyz="0 0 0" rpy="-1.5708 0 -1.5708" />
+		<parent link="waist_camera_depth_frame" />
+		<child link="waist_camera_depth_optical_frame" />
+		<axis xyz="0 0 0" />
+	</joint>
+	<link name="waist_camera_color_optical_frame">
+	</link>
+	<joint name="waist_camera_color_optical_frame_fixedjoint" type="fixed">
+		<origin xyz="0 0 0" rpy="-1.5708 0 -1.5708" />
+		<parent link="waist_camera_color_frame" />
+		<child link="waist_camera_color_optical_frame" />
+		<axis xyz="0 0 0" />
+	</joint>
+</robot>

@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot name="fr5_robot">
+    <link name="world" />
+    <joint name="world" type="fixed">
+        <parent link="world" />
+        <child link="base_link" />
+    </joint>
+    <link name="base_link">
+        
+<inertial>
+            <origin xyz="-0.00044457 0.0004811 0.032592" rpy="0 0 0" />
+            <mass value="1.073" />
+            <inertia ixx="0.0024567" ixy="-1.5435E-05" ixz="-1.3507E-05" iyy="0.0024575" iyz="1.4421E-05" izz="0.0038879" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://fr5_description/meshes/visual/base.dae" />
+            </geometry>
+            <material name="">
+                <color rgba="0.89804 0.91765 0.92941 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://fr5_description/meshes/collision/base_link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <link name="shoulder_Link">
+        
+<inertial>
+            <origin xyz="1.3785E-06 -0.0031495 0.14526" rpy="0 0 0" />
+            <mass value="4.1676" />
+            <inertia ixx="0.010397" ixy="-1.005E-08" ixz="1.6274E-07" iyy="0.010278" iyz="0.00015856" izz="0.0076307" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://fr5_description/meshes/visual/shoulder.dae" />
+            </geometry>
+            <material name="">
+                <color rgba="0.89804 0.91765 0.92941 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://fr5_description/meshes/collision/shoulder_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="j1" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="shoulder_Link" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.0543261" upper="3.0543261" effort="150" velocity="3.15" />
+        <calibration rising="0" falling="0" />
+        <dynamics damping="0" friction="0" />
+        <safety_controller soft_upper_limit="3.0543261" soft_lower_limit="-3.0543261" k_position="100.0" k_velocity="40.0" />
+    </joint>
+    <link name="upperarm_Link">
+        
+<inertial>
+            <origin xyz="-2.2928E-05 0.33278 0.084237" rpy="0 0 0" />
+            <mass value="20.782" />
+            <inertia ixx="2.9074" ixy="-0.00023104" ixz="-2.5049E-05" iyy="0.12653" iyz="-0.1479" izz="2.8157" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://fr5_description/meshes/visual/upperarm.dae" />
+            </geometry>
+            <material name="">
+                <color rgba="0.89804 0.91765 0.92941 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://fr5_description/meshes/collision/upperarm_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="j2" type="revolute">
+        <origin xyz="0 0 0.155" rpy="1.570796 -1.570796 0" />
+        <parent link="shoulder_Link" />
+        <child link="upperarm_Link" />
+        <axis xyz="0 0 1" />
+        <limit lower="-4.6251225" upper="1.4835298" effort="150" velocity="3.15" />
+        <calibration rising="0" falling="0" />
+        <dynamics damping="0" friction="0" />
+        <safety_controller soft_upper_limit="1.4835298" soft_lower_limit="-4.6251225" k_position="100" k_velocity="40" />
+    </joint>
+    <link name="forearm_Link">
+        
+<inertial>
+            <origin xyz="0.092224 -2.2928E-05 0.084237" rpy="0 0 0" />
+            <mass value="20.782" />
+            <inertia ixx="0.12653" ixy="0.00023104" ixz="0.1479" iyy="2.9074" iyz="-2.5049E-05" izz="2.8157" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://fr5_description/meshes/visual/forearm.dae" />
+            </geometry>
+            <material name="">
+                <color rgba="0.89804 0.91765 0.92941 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://fr5_description/meshes/collision/forearm_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="j3" type="revolute">
+        <origin xyz="0 0.425 0" rpy="0 0 -1.570796" />
+        <parent link="upperarm_Link" />
+        <child link="forearm_Link" />
+        <axis xyz="0 0 1" />
+        <limit lower="-2.8274333" upper="2.8274333" effort="150" velocity="3.15" />
+        <calibration rising="0" falling="0" />
+        <dynamics damping="0" friction="0" />
+        <safety_controller soft_upper_limit="2.8274333" soft_lower_limit="-2.8274333" k_position="100" k_velocity="40" />
+    </joint>
+    <link name="wrist1_Link">
+        
+<inertial>
+            <origin xyz="0.48722 -2.2928E-05 0.084237" rpy="0 0 0" />
+            <mass value="20.782" />
+            <inertia ixx="0.12653" ixy="0.00023104" ixz="0.1479" iyy="2.9074" iyz="-2.5049E-05" izz="2.8157" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://fr5_description/meshes/visual/wrist1.dae" />
+            </geometry>
+            <material name="">
+                <color rgba="0.89804 0.91765 0.92941 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://fr5_description/meshes/collision/wrist1_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="j4" type="revolute">
+        <origin xyz="-0.395 0 0" rpy="0 0 1.570796" />
+        <parent link="forearm_Link" />
+        <child link="wrist1_Link" />
+        <axis xyz="0 0 1" />
+        <limit lower="-4.6251225" upper="1.4835298" effort="28" velocity="3.2" />
+        <calibration rising="0" falling="0" />
+        <dynamics damping="0" friction="0" />
+        <safety_controller soft_upper_limit="1.4835298" soft_lower_limit="-4.6251225" k_position="100" k_velocity="40" />
+    </joint>
+    <link name="wrist2_Link">
+        
+<inertial>
+            <origin xyz="-2.396E-06 0.0045906 0.099342" rpy="0 0 0" />
+            <mass value="1.570796" />
+            <inertia ixx="0.0022393" ixy="-1.0022E-07" ixz="-3.2115E-08" iyy="0.0013914" iyz="-2.2223E-05" izz="0.0021864" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://fr5_description/meshes/visual/wrist2.dae" />
+            </geometry>
+            <material name="">
+                <color rgba="0.89804 0.91765 0.92941 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://fr5_description/meshes/collision/wrist2_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="j5" type="revolute">
+        <origin xyz="0 0 0.13" rpy="1.570796 0 -1.570796" />
+        <parent link="wrist1_Link" />
+        <child link="wrist2_Link" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.0543261" upper="3.0543261" effort="28" velocity="3.2" />
+        <calibration rising="0" falling="0" />
+        <dynamics damping="0" friction="0" />
+        <safety_controller soft_upper_limit="3.0543261" soft_lower_limit="-3.0543261" k_position="100" k_velocity="40" />
+    </joint>
+    <link name="wrist3_Link">
+        
+<inertial>
+            <origin xyz="5.8427E-06 7.5807E-05 0.079126" rpy="0 0 0" />
+            <mass value="0.52527" />
+            <inertia ixx="0.00027801" ixy="-3.5346E-07" ixz="-1.7431E-07" iyy="0.00027736" iyz="-7.5888E-08" izz="0.00041582" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://fr5_description/meshes/visual/wrist3.dae" />
+            </geometry>
+            <material name="">
+                <color rgba="0.89804 0.91765 0.92941 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://fr5_description/meshes/collision/wrist3_Link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="j6" type="revolute">
+        <origin xyz="0 0 0.102" rpy="-1.570796 2.268928 0" />
+        <parent link="wrist2_Link" />
+        <child link="wrist3_Link" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.0543261" upper="3.0543261" effort="28" velocity="3.2" />
+        <calibration rising="0" falling="0" />
+        <dynamics damping="0" friction="0" />
+        <safety_controller soft_upper_limit="3.0543261" soft_lower_limit="-3.0543261" k_position="100" k_velocity="40" />
+    </joint>
+    
+<transmission name="trans_j1">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="j1">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="j1_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_j2">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="j2">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="j2_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_j3">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="j3">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="j3_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_j4">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="j4">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="j4_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_j5">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="j5">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="j5_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_j6">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="j6">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="j6_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/fr5_arm</robotNamespace>
+            <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+        </plugin>
+    </gazebo>
+</robot>

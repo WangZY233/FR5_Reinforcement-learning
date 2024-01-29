@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<link name="neck_yaw_link">
+		<inertial>
+			<origin xyz="-3.3154E-05 0.0010102 0.05946" rpy="0 0 0" />
+			<mass value="0.080455" />
+			<inertia ixx="9.1874E-05" ixy="1.2373E-08" ixz="6.1585E-09" iyy="9.1348E-05" iyz="-3.7871E-06" izz="3.1376E-05" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/neck_yaw_link.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/neck_yaw_link.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="neck_yaw" type="revolute">
+		<origin xyz="0 -0.2789 -0.0037501" rpy="1.5708 1.5708 0" />
+		<parent link="lumbar_roll_link" />
+		<child link="neck_yaw_link" />
+		<axis xyz="0 0 1" />
+		<limit lower="-1.5708" upper="1.5708" effort="28" velocity="3.142" />
+		<safety_controller soft_upper_limit="1.4835" soft_lower_limit="-1.4835" k_position="36" k_velocity="18" />
+	</joint>
+	<link name="neck_pitch_link">
+		<inertial>
+			<origin xyz="-0.044444 0.0010411 0.0051763" rpy="0 0 0" />
+			<mass value="0.16851" />
+			<inertia ixx="8.6177E-05" ixy="9.283E-06" ixz="-1.921E-06" iyy="0.00012346" iyz="1.3125E-06" izz="0.00016706" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/neck_pitch_link.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/neck_pitch_link.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="neck_pitch" type="revolute">
+		<origin xyz="0 0 0.092" rpy="1.5708 1.5708 0" />
+		<parent link="neck_yaw_link" />
+		<child link="neck_pitch_link" />
+		<axis xyz="0 0 1" />
+		<limit lower="-0.7854" upper="0.7854" effort="28" velocity="3.142" />
+		<safety_controller soft_upper_limit="0.6981" soft_lower_limit="-0.6981" k_position="36" k_velocity="18" />
+	</joint>
+	<link name="neck_roll_link">
+		<inertial>
+			<origin xyz="-1.62E-05 -0.073781 0.0086648" rpy="0 0 0" />
+			<mass value="0.38663" />
+			<inertia ixx="0.00091275" ixy="-6.286E-09" ixz="-1.2594E-07" iyy="0.0010092" iyz="8.0324E-05" izz="0.0010168" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/neck_roll_link.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/neck_roll_link.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="neck_roll" type="revolute">
+		<origin xyz="-0.0615 0 0" rpy="1.5708 1.5708 0" />
+		<parent link="neck_pitch_link" />
+		<child link="neck_roll_link" />
+		<axis xyz="0 0 1" />
+		<limit lower="-0.5236" upper="0.5236" effort="28" velocity="1.571" />
+		<safety_controller soft_upper_limit="0.4014" soft_lower_limit="-0.4014" k_position="18" k_velocity="36" />
+	</joint>
+</robot>

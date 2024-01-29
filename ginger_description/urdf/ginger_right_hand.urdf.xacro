@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<link name="right_thumb_link">
+		<inertial>
+			<origin xyz="-0.0011644 -0.029522 0.0034201" rpy="0 0 0" />
+			<mass value="0.0044676" />
+			<inertia ixx="2.5019E-07" ixy="-1.2689E-08" ixz="-8.8219E-10" iyy="8.4197E-08" iyz="-5.4806E-09" izz="2.5222E-07" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/right_thumb_link.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/right_thumb_link.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="right_thumb" type="revolute">
+		<origin xyz="0.051255 -0.10776 0.042885" rpy="-2.8284 0.33828 -2.3814" />
+		<parent link="right_wrist_roll_link" />
+		<child link="right_thumb_link" />
+		<axis xyz="0 0 1" />
+		<limit lower="-0.1" upper="1.13" effort="28" velocity="9.667" />
+		<safety_controller soft_upper_limit="1.13" soft_lower_limit="-0.1" k_position="111" k_velocity="6" />
+	</joint>
+	<link name="right_index_link">
+		<inertial>
+			<origin xyz="-0.00061734 -0.034356 -0.0012845" rpy="0 0 0" />
+			<mass value="0.0094828" />
+			<inertia ixx="6.3427E-07" ixy="1.1998E-08" ixz="-8.089E-10" iyy="2.5751E-07" iyz="-7.2387E-09" izz="6.0069E-07" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/right_index_link.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/right_index_link.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="right_index" type="revolute">
+		<origin xyz="-0.0019454 -0.12952 0.028803" rpy="0 0 0" />
+		<parent link="right_wrist_roll_link" />
+		<child link="right_index_link" />
+		<axis xyz="0 0 1" />
+		<limit lower="-0.1" upper="1.13" effort="28" velocity="9.667" />
+		<safety_controller soft_upper_limit="1.13" soft_lower_limit="-0.1" k_position="111" k_velocity="6" />
+	</joint>
+	<link name="right_middle_link">
+		<inertial>
+			<origin xyz="-0.00061729 -0.034357 -0.0042925" rpy="0 0 0" />
+			<mass value="0.0094828" />
+			<inertia ixx="6.3427E-07" ixy="1.1998E-08" ixz="-8.0893E-10" iyy="2.5751E-07" iyz="-7.2392E-09" izz="6.0069E-07" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/right_middle_link.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/right_middle_link.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="right_middle" type="revolute">
+		<origin xyz="-0.0039454 -0.13452 0.013811" rpy="0 0 0" />
+		<parent link="right_wrist_roll_link" />
+		<child link="right_middle_link" />
+		<axis xyz="0 0 1" />
+		<limit lower="-0.1" upper="1.13" effort="28" velocity="9.667" />
+		<safety_controller soft_upper_limit="1.13" soft_lower_limit="-0.1" k_position="111" k_velocity="6" />
+	</joint>
+	<link name="right_ring_link">
+		<inertial>
+			<origin xyz="-0.0006174 -0.034354 -0.0039841" rpy="0 0 0" />
+			<mass value="0.0094828" />
+			<inertia ixx="6.3427E-07" ixy="1.1998E-08" ixz="-8.0889E-10" iyy="2.5751E-07" iyz="-7.2387E-09" izz="6.0069E-07" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/right_ring_link.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/right_ring_link.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="right_ring" type="revolute">
+		<origin xyz="-0.0019454 -0.12652 -0.0044968" rpy="0 0 0" />
+		<parent link="right_wrist_roll_link" />
+		<child link="right_ring_link" />
+		<axis xyz="0 0 1" />
+		<limit lower="-0.1" upper="1.13" effort="28" velocity="9.667" />
+		<safety_controller soft_upper_limit="1.13" soft_lower_limit="-0.1" k_position="111" k_velocity="6" />
+	</joint>
+	<link name="right_pinky_link">
+		<inertial>
+			<origin xyz="-0.00020124 -0.034313 0.00011417" rpy="0 0 0" />
+			<mass value="0.0098044" />
+			<inertia ixx="6.5809E-07" ixy="1.8457E-08" ixz="2.3842E-09" iyy="2.6577E-07" iyz="-1.2574E-09" izz="6.242E-07" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/right_pinky_link.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/right_pinky_link.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="right_pinky" type="revolute">
+		<origin xyz="-0.0013454 -0.12182 -0.026497" rpy="0 0 0" />
+		<parent link="right_wrist_roll_link" />
+		<child link="right_pinky_link" />
+		<axis xyz="0 0 1" />
+		<limit lower="-0.1" upper="1.13" effort="28" velocity="9.667" />
+		<safety_controller soft_upper_limit="1.13" soft_lower_limit="-0.1" k_position="111" k_velocity="6" />
+	</joint>
+</robot>

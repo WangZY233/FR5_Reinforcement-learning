@@ -1,0 +1,18 @@
+<launch>
+	<arg name="model" />
+	<arg name="use_gui" default="true" />
+	<arg name="rate" default="30" />
+
+	<!--
+	param
+	name="robot_description"
+	textfile="$(find ginger_description)/urdf/ginger_description.urdf" /
+	-->
+	<param name="robot_description" command="$(find xacro)/xacro '$(find ginger_description)/urdf/ginger.urdf.xacro'" />
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" unless="$(arg use_gui)" />
+	<node name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" if="$(arg use_gui)">
+	<param name="rate" value="30"/>
+	</node>
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find ginger_description)/urdf.rviz" />
+</launch>

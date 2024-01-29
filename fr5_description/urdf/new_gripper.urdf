@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="new_gripper">
+  <link
+    name="hand_base_link">
+    <inertial>
+      <origin
+        xyz="0.077292 -0.051364 7.4376E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.17705" />
+      <inertia
+        ixx="6.9058E-05"
+        ixy="2.7371E-06"
+        ixz="-1.5809E-09"
+        iyy="0.00010069"
+        iyz="-4.6569E-09"
+        izz="0.00011794" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_gripper/meshes/hand_base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_gripper/meshes/hand_base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="finger_link">
+    <inertial>
+      <origin
+        xyz="1.3878E-17 -3.7024E-17 0.099518"
+        rpy="0 0 0" />
+      <mass
+        value="0.031105" />
+      <inertia
+        ixx="3.6074E-06"
+        ixy="1.3396E-07"
+        ixz="-4.229E-22"
+        iyy="5.8935E-06"
+        iyz="2.8011E-23"
+        izz="6.8651E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_gripper/meshes/finger_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://new_gripper/meshes/finger_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="handj1"
+    type="fixed">
+    <origin
+      xyz="0.11988 0 -0.052907"
+      rpy="3.1416 -1.5708 0" />
+    <parent
+      link="hand_base_link" />
+    <child
+      link="finger_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+</robot>

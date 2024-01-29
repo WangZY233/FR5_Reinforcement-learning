@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<link name="knee_link">
+		<inertial>
+			<origin xyz="0.010491 -0.21755 0.00027143" rpy="0 0 0" />
+			<mass value="2.4181" />
+			<inertia ixx="0.022411" ixy="-0.0010541" ixz="3.8234E-06" iyy="0.011162" iyz="3.2117E-06" izz="0.016672" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/knee_link.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/knee_link.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="knee" type="revolute">
+		<origin xyz="-0.00041648 -5.1221E-05 0.35832" rpy="-1.5708 -5.3217E-05 0" />
+		<parent link="base_link" />
+		<child link="knee_link" />
+		<axis xyz="0 0 1" />
+		<limit lower="-0.5236" upper="0.5524" effort="28" velocity="1.571" />
+		<safety_controller soft_upper_limit="0.4651" soft_lower_limit="-0.4363" k_position="18" k_velocity="36" />
+	</joint>
+	<link name="lumbar_yaw_link">
+		<inertial>
+			<origin xyz="2.1442E-07 -0.0036607 -0.042772" rpy="0 0 0" />
+			<mass value="0.67755" />
+			<inertia ixx="0.0017818" ixy="6.5136E-06" ixz="-2.1577E-09" iyy="0.0024504" iyz="-2.3816E-05" izz="0.0014247" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/lumbar_yaw_link.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/lumbar_yaw_link.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="lumbar_yaw" type="revolute">
+		<origin xyz="0 -0.45522 0" rpy="-1.5708 0 -3.1415" />
+		<parent link="knee_link" />
+		<child link="lumbar_yaw_link" />
+		<axis xyz="0 0 1" />
+		<limit lower="-1.5708" upper="1.5708" effort="28" velocity="1.571" />
+		<safety_controller soft_upper_limit="1.4835" soft_lower_limit="-1.4835" k_position="18" k_velocity="36" />
+	</joint>
+	<link name="lumbar_pitch_Link">
+		<inertial>
+			<origin xyz="-0.0022517 0.021486 -1.4685E-06" rpy="0 0 0" />
+			<mass value="0.37626" />
+			<inertia ixx="0.00078306" ixy="8.6907E-05" ixz="-4.9398E-08" iyy="0.0024086" iyz="1.1248E-08" izz="0.002101" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/lumbar_pitch_Link.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/lumbar_pitch_Link.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="lumbar_pitch" type="revolute">
+		<origin xyz="0 0 0" rpy="1.5708 1.5708 0" />
+		<parent link="lumbar_yaw_link" />
+		<child link="lumbar_pitch_Link" />
+		<axis xyz="0 0 1" />
+		<limit lower="-0.7854" upper="1.021" effort="28" velocity="1.571" />
+		<safety_controller soft_upper_limit="0.9338" soft_lower_limit="-0.6981" k_position="18" k_velocity="36" />
+	</joint>
+	<link name="lumbar_roll_link">
+		<inertial>
+			<origin xyz="-2.4945E-06 -0.26165 -0.028349" rpy="0 0 0" />
+			<mass value="1.541" />
+			<inertia ixx="0.00694649968834784" ixy="7.53104681177609E-07" ixz="-7.90006690596177E-07" iyy="0.0043763361403504" iyz="-0.00060199178802058" izz="0.0077043810084105" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/visual/lumbar_roll_link.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://ginger_description/meshes/collision/lumbar_roll_link.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="lumbar_roll" type="revolute">
+		<origin xyz="-0.105 0 0" rpy="1.5708 1.5708 0" />
+		<parent link="lumbar_pitch_Link" />
+		<child link="lumbar_roll_link" />
+		<axis xyz="0 0 1" />
+		<limit lower="-0.69813" upper="0.69813" effort="28" velocity="1.571" />
+		<safety_controller soft_upper_limit="0.6109" soft_lower_limit="-0.6109" k_position="18" k_velocity="36" />
+	</joint>
+</robot>
