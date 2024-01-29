@@ -19,10 +19,10 @@ from loguru import logger
 now = time.strftime('%m%d-%H%M%S', time.localtime())
 
 # HACK
-models_dir = f"F:\\Pycharm_project\\RL\\models\\PPO\\"+now
-logs_dir = f"F:\\Pycharm_project\\RL\\logs\\PPO\\"+now
-checkpoints = f"F:\\Pycharm_project\\RL\\checkpoints\\PPO\\"+now
-test = f"F:\\Pycharm_project\\RL\\logs\\test\\"+now
+models_dir = f"models\\PPO\\"+now
+logs_dir = f"logs\\PPO\\"+now
+checkpoints = f"checkpoints\\PPO\\"+now
+test = f"logs\\test\\"+now
 
 
 def evaluate_model(model, env, n_eval_episodes=10):
