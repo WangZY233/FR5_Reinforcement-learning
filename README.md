@@ -14,14 +14,12 @@ Fr5_train.py
 
     强化学习训练代码
 
-Fr5_train.py
+FR5_test.py
 
     用于强化学习测试
 
-#### 使用说明
+#### 训练
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+直接运行Fr5_train.py
 
 
