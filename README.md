@@ -1,3 +1,11 @@
+<!--
+ * @Author: wangziyuan 13536655301
+ * @Date: 2024-04-10 21:59:04
+ * @LastEditors: wangziyuan 13536655301
+ * @LastEditTime: 2024-04-10 23:15:35
+ * @FilePath: \RL_FR5\FR5_Reinforcement-learning\README.md
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 # FR_Reinforcement learning
 中文版跳转   [中文版Readme](README_cn.md)
 ## Introduction
@@ -44,7 +52,7 @@ Available algorithms：
 
 Start training:
 ```python
-   python Fr5_train.py
+python Fr5_train.py --timesteps 30000 --gui False
 ```
 Visualize training results with TensorBoard:
 
@@ -53,5 +61,5 @@ tensorboard --logdir .../logs/PPO/your_training_results --port 6006
 ```
 Infer the model:
 ```
-python Fr5_test.py
+python Fr5_test.py --model_path your_model_dir --gui True
 ```

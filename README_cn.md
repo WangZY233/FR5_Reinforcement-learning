@@ -48,7 +48,7 @@ FR5_test.py
 
  开始训练：
 ```python
-   python Fr5_train.py
+python Fr5_train.py --timesteps 30000 --gui False
 ```
 tensorboard可视化训练结果
 
@@ -57,5 +57,5 @@ tensorboard --logdir .../logs/PPO/你的训练结果 --port 6006
 ```
 推理模型
 ```
-python Fr5_test.py
+python Fr5_test.py --model_path your_model_dir --gui True
 ```
