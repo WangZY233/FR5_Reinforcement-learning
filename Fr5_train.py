@@ -23,14 +23,16 @@ from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.callbacks import EvalCallback,CallbackList,BaseCallback,CheckpointCallback
 from stable_baselines3.common.evaluation import evaluate_policy  
 from loguru import logger
+from utils.arguments import get_args
 
 now = time.strftime('%m%d-%H%M%S', time.localtime())
+args, kwargs = get_args()
 
 # HACK
-models_dir = f"models\\PPO\\"+now
-logs_dir = f"logs\\PPO\\"+now
-checkpoints = f"checkpoints\\PPO\\"+now
-test = f"logs\\test\\"+now
+models_dir = args.models_dir
+logs_dir = args.logs_dir
+checkpoints = args.checkpoints
+test = args.test
 
 
 def evaluate_model(model, env, n_eval_episodes=10):
@@ -138,7 +140,7 @@ if __name__ == '__main__':
                              log_path=logs_dir, eval_freq=3000,
                              deterministic=True, render=True,n_eval_episodes = 100)
 
-    TIMESTEPS = 30000
+    TIMESTEPS = args.timesteps
     for eposide in range(1000):
         # 创建 CheckpointCallback 实例来保存模型检查点
         checkpoint_callback = CheckpointCallback(save_freq=1000, save_path=checkpoints)
