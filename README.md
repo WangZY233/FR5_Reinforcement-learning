@@ -1,5 +1,5 @@
 # FR_Reinforcement learning
-
+中文版跳转   [中文版Readme](README_cn.md)
 ## Introduction
 This project is a reinforcement learning training code for grasping with the FAIRINO FR5 robotic arm, based on pybullet and stable baseline3.
 
