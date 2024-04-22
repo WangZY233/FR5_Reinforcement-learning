@@ -20,7 +20,7 @@ gym==0.26.2
 
 pybullet
 
-opencv
+opencv-python
 
 loguru
 
