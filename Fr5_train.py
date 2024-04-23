@@ -123,7 +123,31 @@ if __name__ == '__main__':
 
     # HACK
     # Define and Train the agent
-    model = PPO("MlpPolicy", env, verbose=1, tensorboard_log=logs_dir,batch_size=256,device="cuda")
+    # model = PPO("MlpPolicy", env, verbose=1, tensorboard_log=logs_dir,batch_size=256,device="cuda")
+    model = PPO(policy = "MlpPolicy",
+            env = env,
+            learning_rate = 0.0003,
+            n_steps = 2048,
+            batch_size = 2048,
+            n_epochs = 10,
+            gamma = 0.99,
+            gae_lambda = 0.95,
+            clip_range=  0.2,
+            clip_range_vf = None,
+            normalize_advantage = True,
+            ent_coef = 0,
+            vf_coef = 0.5,
+            max_grad_norm = 0.5,
+            use_sde = True,
+            sde_sample_freq = -1,
+            target_kl = None,
+            stats_window_size = 100,
+            tensorboard_log = logs_dir,
+            policy_kwargs = dict(normalize_images=False),
+            verbose = 1,
+            seed = None,
+            device = "cuda",
+            _init_setup_model = True)
     # model = PPO.load("F:\\Pycharm_project\\RL\\models\\PPO\\1211-140713\\best_model.zip",env=env,print_system_info=True)
     model.set_logger(new_logger)
     tensorboard_callback = CustomCallback()
