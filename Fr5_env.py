@@ -4,6 +4,8 @@
  @Last Modified by:   Prince Wang 
  @Last Modified time: 2023-10-24 23:04:04 
 '''
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 
 
 import gymnasium as gym
@@ -406,8 +408,8 @@ class FR5_Env(gym.Env):
 if __name__ == "__main__":
     from stable_baselines3.common.env_checker import check_env 
     Env = FR5_Env(gui=True)
-    # Env.reset()
-    # check_env(Env, warn=True)
+    Env.reset()
+    check_env(Env, warn=True)
     # for i in range(100):
     #         p.stepSimulation()
     #         time.sleep(1./240.)

@@ -4,4 +4,5 @@ opencv-python
 loguru
 stable_baselines3
 scipy
-numpy
+numpy==1.25.0
+tensorboard
