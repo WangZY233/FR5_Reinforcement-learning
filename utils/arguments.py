@@ -2,7 +2,7 @@
 Author: wangziyuan 13536655301
 Date: 2024-04-10 22:55:27
 LastEditors: wangziyuan 13536655301
-LastEditTime: 2024-04-23 15:04:49
+LastEditTime: 2024-05-09 16:16:12
 '''
 
 import argparse
@@ -12,7 +12,7 @@ now = time.strftime('%m%d-%H%M%S', time.localtime())
 def get_args():
     parser = argparse.ArgumentParser(description="Running time configurations")
     
-    parser.add_argument('--model_path', type=str, default="FR5_Reinforcement-learning\models\PPO\best_model_1.5mm.zip")
+    parser.add_argument('--model_path', type=str, default="models\\PPO\\best_model.zip")
     parser.add_argument('--test_num', type=int, default=100)
     parser.add_argument('--gui', type=bool, default=False)
     parser.add_argument('--models_dir', type=str, default=f"models\\PPO\\"+now)
