@@ -21,7 +21,7 @@ Deployment hardware and software: NVIDIA GeForce RTX 3070 graphics processor and
 ## II.Scene Deployment Instructions
 The FAIRINO FR5 is a high-precision industrial six-axis robotic arm with a repeatability of 0.02mm. We have added a two-finger gripper PGI-140-80 from DH Robotics to the end of the arm, which can achieve an effective stroke of 80mm and a maximum gripping force of 140N. In this experiment, we use pybullet as the simulation platform. The robotic arm will use its gripper to grasp a coffee cup placed in an 80x40x20cm space in front of it parallel to the ground. If the distance between the center of the gripper and the center of the cup is less than 1.5cm, it is judged as a successful grasp. If the robotic arm encounters: 1) the gripper touches the cup or table during motion, 2) the number of motion steps exceeds the limit, then it is judged as task failure. In both simulation and real scenarios, after each experiment, we will randomly reposition the cup.
 ![仿真场景](pic/sim.PNG "仿真场景")
-![真实场景](pic/real.PNG "真实场景")
+![真实场景](pic/real.jpg "真实场景")
 
 ## III. Requirments
 gym==0.26.2
