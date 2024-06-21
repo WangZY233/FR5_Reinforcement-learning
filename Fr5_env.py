@@ -29,15 +29,18 @@ class FR5_Env(gym.Env):
         super(FR5_Env).__init__()
         self.step_num = 0
 
-        # 设置最小的关节变化量
+        # 设置动作空间范围
         low_action = np.array([-1.0,-1.0,-1.0,-1.0,-1.0,-1.0])
         high_action = np.array([1.0,1.0,1.0,1.0,1.0,1.0])
         self.action_space = spaces.Box(low=low_action, high=high_action, dtype=np.float32)
 
+        # 设置状态空间范围
         low = np.zeros((1,12),dtype=np.float32)
         high = np.ones((1,12),dtype=np.float32)
         self.observation_space = spaces.Box(low=low, high=high, dtype=np.float32)
 
+
+        # 仿真环境初始化
         if gui == False:
             self.p = bullet_client.BulletClient(connection_mode=p.DIRECT)
         else :
@@ -73,13 +76,7 @@ class FR5_Env(gym.Env):
         self.targettable = self.p.createMultiBody(baseMass=0,  # 质量
                             baseCollisionShapeIndex=collisionTargetId,
                             basePosition=[0.5, 0.5, 2])
-        
-        # collisionTargetId1 = self.p.createCollisionShape(shapeType=p.GEOM_SPHERE,
-        #                                     radius=0.01)
-        # self.show = self.p.createMultiBody(baseMass=0,  # 质量
-        #                     baseCollisionShapeIndex=collisionTargetId1,
-        #                     basePosition=[0.5, 0.5, 2])
-        
+                
                                                               
 
     def step(self, action):
@@ -96,6 +93,7 @@ class FR5_Env(gym.Env):
             joint_angle = joint_info[0]  # 第一个元素是当前关节角度
             joint_angles.append(joint_angle)
 
+        # 执行action
         Fr5_joint_angles = np.array(joint_angles)+(np.array(action[0:6])/180*np.pi)
         gripper = np.array([0,0])
         anglenow = np.hstack([Fr5_joint_angles,gripper])
@@ -161,9 +159,6 @@ class FR5_Env(gym.Env):
             logger.info("碰撞目标杯子的台子! ")
         
         # 2.判断机械臂与夹爪的距离
-        # Gripper_posx = (p.getLinkState(self.fr5, 8)[0][0]+p.getLinkState(self.fr5, 9)[0][0])/2
-        # Gripper_posy = (p.getLinkState(self.fr5, 8)[0][1]+p.getLinkState(self.fr5, 9)[0][1])/2
-        # Gripper_posz = (p.getLinkState(self.fr5, 8)[0][2]+p.getLinkState(self.fr5, 9)[0][2])/2
         Gripper_posx = p.getLinkState(self.fr5, 6)[0][0]
         Gripper_posy = p.getLinkState(self.fr5, 6)[0][1]
         Gripper_posz = p.getLinkState(self.fr5, 6)[0][2]
@@ -215,7 +210,7 @@ class FR5_Env(gym.Env):
         # all:判断成功或失败
         # 并计算成功或失败的奖励
 
-        # 如果两个夹爪都接触目标，那么任务成功
+        # 夹爪中心和目标之间距离小于一定值，则任务成功
         if success == True and self.step_num <= 100:
             total_reward = total_reward + 1000
             self.terminated = True
@@ -302,27 +297,16 @@ class FR5_Env(gym.Env):
     def reset(self, seed=None, options=None):
         self.step_num = 0
         self.reward = 0
-        # self.stepcount = 0
         self.terminated = False
         # 重新设置机械臂的位置
         neutral_angle =[ -49.45849125928217, -57.601209583849, -138.394013961943, -164.0052115563118,-49.45849125928217,-90,0,0]
-        # neutral_angle =[ 0,0,0,0,0,0,0,0]
         neutral_angle = [x * math.pi / 180 for x in neutral_angle]
         p.setJointMotorControlArray(self.fr5,[1,2,3,4,5,6,8,9],p.POSITION_CONTROL,targetPositions=neutral_angle)
-
-        # neutral_angle =[ -49.45849125928217, -57.601209583849, -138.394013961943, -164.0052115563118,-49.45849125928217,0,0]
-        # # neutral_angle =[ 0,0,0,0,0,0,0,0]
-        # neutral_angle = [x * math.pi / 180 for x in neutral_angle]
-        # p.setJointMotorControlArray(self.fr5,[1,2,3,4,5,8,9],p.POSITION_CONTROL,targetPositions=neutral_angle)
-        # p.setJointMotorControl2(self.fr5,6,p.POSITION_CONTROL,targetPosition=-50*math.pi/180,force = 100)
 
         # # 重新设置目标位置
         self.goaly = np.random.uniform(-0.2, 0.2, 1)
         self.goalx = np.random.uniform(0.6, 0.8, 1)
         self.goalz = np.random.uniform(0.1, 0.3, 1)
-        # self.goalx[0] = 0.7
-        # self.goaly[0] = 0.0
-        # self.goalz[0] = 0.3
         self.target_position = [self.goalx[0], self.goaly[0], self.goalz[0]]
         self.targettable_position = [self.goalx[0], self.goaly[0], self.goalz[0]-0.175]
         self.p.resetBasePositionAndOrientation(self.targettable,self.targettable_position, [0, 0, 0, 1])
@@ -336,9 +320,6 @@ class FR5_Env(gym.Env):
 
 
         # 计算observation
-        # Gripper_posx = (p.getLinkState(self.fr5, 8)[0][0]+p.getLinkState(self.fr5, 9)[0][0])/2
-        # Gripper_posy = (p.getLinkState(self.fr5, 8)[0][1]+p.getLinkState(self.fr5, 9)[0][1])/2
-        # Gripper_posz = (p.getLinkState(self.fr5, 8)[0][2]+p.getLinkState(self.fr5, 9)[0][2])/2
         Gripper_posx = p.getLinkState(self.fr5, 6)[0][0]
         Gripper_posy = p.getLinkState(self.fr5, 6)[0][1]
         Gripper_posz = p.getLinkState(self.fr5, 6)[0][2]
@@ -350,16 +331,10 @@ class FR5_Env(gym.Env):
         # print([Gripper_posx, Gripper_posy,Gripper_posz])
         gripper_centre_pos = [Gripper_posx, Gripper_posy,Gripper_posz] + rotated_relative_position
 
-        # self.p.resetBasePositionAndOrientation(self.show,gripper_centre_pos, [0, 0, 0, 1])
-        # self.p.stepSimulation()
-
         joint_angles = [0,0,0,0,0,0]
         for i in [1,2,3,4,5,6]:
             joint_info = p.getJointState(self.fr5, i)
             joint_angles[i-1]  = joint_info[0]*180/np.pi  # 第一个元素是当前关节角度
-        # print("joint_angles",str(joint_angles))
-        # print("gripper_centre_pos",str(gripper_centre_pos))
-
         # 计算夹爪的朝向
         gripper_orientation = p.getLinkState(self.fr5, 7)[1]
         gripper_orientation = R.from_quat(gripper_orientation)
@@ -380,9 +355,8 @@ class FR5_Env(gym.Env):
         
         self.observation = np.hstack((obs_joint_angles,obs_gripper_centre_pos,obs_target_position),dtype=np.float32).flatten()
         
-        self.observation = self.observation.flatten()
-        self.observation = self.observation.reshape(1,12)
-        # self.observation = np.hstack((np.array(joint_angles,dtype=np.float32),target_delta_position[0]),dtype=np.float32)
+        # self.observation = self.observation.flatten()
+        # self.observation = self.observation.reshape(1,12)
         
         
         info = {}
