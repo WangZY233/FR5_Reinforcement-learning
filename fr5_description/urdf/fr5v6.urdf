@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="fr5v6">
+  
+  <link name="world">
+  </link>
+  <joint name="world" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+  </joint>
+
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.00031896 -0.00029673 0.042463"
+        rpy="0 0 0" />
+      <mass
+        value="1.6185" />
+      <inertia
+        ixx="0.0030836"
+        ixy="1.5354E-05"
+        ixz="-1.9315E-05"
+        iyy="0.0030825"
+        iyz="-1.7918E-05"
+        izz="0.0045209" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/fr5v6/visual/base_link.DAE" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89804 0.91765 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/fr5v6/collision/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="j1_Link">
+    <inertial>
+      <origin
+        xyz="5.0029E-07 -0.0040922 0.14629"
+        rpy="0 0 0" />
+      <mass
+        value="4.3771" />
+      <inertia
+        ixx="0.010731"
+        ixy="-8.0587E-09"
+        ixz="-3.6773E-08"
+        iyy="0.010408"
+        iyz="0.00012853"
+        izz="0.0081793" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/fr5v6/visual/j1_Link.DAE" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89804 0.91765 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/fr5v6/collision/j1_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="j1"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="j1_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.0543"
+      upper="3.0543"
+      effort="150"
+      velocity="3.15" />
+    <calibration
+      rising="0"
+      falling="0" />
+    <dynamics
+      damping="0"
+      friction="0" />
+    <safety_controller
+      soft_lower_limit="-3.0543"
+      soft_upper_limit="3.0543"
+      k_position="15"
+      k_velocity="10" />
+  </joint>
+  <link
+    name="j2_Link">
+    <inertial>
+      <origin
+        xyz="-0.2125 -5.7643E-09 0.1346"
+        rpy="0 0 0" />
+      <mass
+        value="14.458" />
+      <inertia
+        ixx="0.028392"
+        ixy="-1.337E-07"
+        ixz="-3.9895E-09"
+        iyy="0.4559"
+        iyz="4.214E-08"
+        izz="0.44974" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/fr5v6/visual/j2_Link.DAE" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89804 0.91765 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/fr5v6/collision/j2_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="j2"
+    type="revolute">
+    <origin
+      xyz="0 0 0.152"
+      rpy="1.5708 0 0" />
+    <parent
+      link="j1_Link" />
+    <child
+      link="j2_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-4.6251"
+      upper="1.4835"
+      effort="150"
+      velocity="3.15" />
+    <calibration
+      rising="0"
+      falling="0" />
+    <dynamics
+      damping="0"
+      friction="0" />
+    <safety_controller
+      soft_lower_limit="-4.6251"
+      soft_upper_limit="1.4835"
+      k_position="15"
+      k_velocity="10" />
+  </joint>
+  <link
+    name="j3_Link">
+    <inertial>
+      <origin
+        xyz="-0.18793 -8.4503E-07 0.0066357"
+        rpy="0 0 0" />
+      <mass
+        value="7.6737" />
+      <inertia
+        ixx="0.0085096"
+        ixy="2.1613E-06"
+        ixz="-0.0068678"
+        iyy="0.16971"
+        iyz="3.7086E-08"
+        izz="0.16854" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/fr5v6/visual/j3_Link.DAE" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89804 0.91765 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/fr5v6/collision/j3_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="j3"
+    type="revolute">
+    <origin
+      xyz="-0.425 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="j2_Link" />
+    <child
+      link="j3_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2.8274"
+      upper="2.8274"
+      effort="150"
+      velocity="3.15" />
+    <calibration
+      rising="0"
+      falling="0" />
+    <dynamics
+      damping="0"
+      friction="0" />
+    <safety_controller
+      soft_lower_limit="-2.8274"
+      soft_upper_limit="2.8274"
+      k_position="15"
+      k_velocity="10" />
+  </joint>
+  <link
+    name="j4_Link">
+    <inertial>
+      <origin
+        xyz="4.98E-07 -0.003754 0.097155"
+        rpy="0 0 0" />
+      <mass
+        value="1.6266" />
+      <inertia
+        ixx="0.00216"
+        ixy="4.888E-09"
+        ixz="3.1528E-08"
+        iyy="0.0015455"
+        iyz="3.7678E-05"
+        izz="0.0019902" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/fr5v6/visual/j4_Link.DAE" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89804 0.91765 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/fr5v6/collision/j4_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="j4"
+    type="revolute">
+    <origin
+      xyz="-0.39501 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="j3_Link" />
+    <child
+      link="j4_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-4.6251"
+      upper="1.4835"
+      effort="28"
+      velocity="3.2" />
+    <calibration
+      rising="0"
+      falling="0" />
+    <dynamics
+      damping="0"
+      friction="0" />
+    <safety_controller
+      soft_lower_limit="-4.6251"
+      soft_upper_limit="1.4835"
+      k_position="15"
+      k_velocity="10" />
+  </joint>
+  <link
+    name="j5_Link">
+    <inertial>
+      <origin
+        xyz="-4.5588E-07 0.0038617 0.098257"
+        rpy="0 0 0" />
+      <mass
+        value="1.5812" />
+      <inertia
+        ixx="0.0020612"
+        ixy="8.7064E-09"
+        ixz="-3.4742E-08"
+        iyy="0.0014477"
+        iyz="-2.8534E-05"
+        izz="0.0019573" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/fr5v6/visual/j5_Link.DAE" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89804 0.91765 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origins
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/fr5v6/collision/j5_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="j5"
+    type="revolute">
+    <origin
+      xyz="0 0 0.1021"
+      rpy="1.5708 0 0" />
+    <parent
+      link="j4_Link" />
+    <child
+      link="j5_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.0543"
+      upper="3.0543"
+      effort="28"
+      velocity="3.2" />
+    <calibration
+      rising="0"
+      falling="0" />
+    <dynamics
+      damping="0"
+      friction="0" />
+    <safety_controller
+      soft_lower_limit="-3.0543"
+      soft_upper_limit="3.0543"
+      k_position="15"
+      k_velocity="10" />
+  </joint>
+  <link
+    name="j6_Link">
+    <inertial>
+      <origin
+        xyz="7.7496E-05 1.7751E-05 0.076122"
+        rpy="0 0 0" />
+      <mass
+        value="0.52542" />
+      <inertia
+        ixx="0.00027721"
+        ixy="-1.8677E-09"
+        ixz="-1.188E-07"
+        iyy="0.00027839"
+        iyz="2.2607E-07"
+        izz="0.00041605" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/fr5v6/visual/j6_Link.DAE" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89804 0.91765 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/fr5v6/collision/j6_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="j6"
+    type="revolute">
+    <origin
+      xyz="0 0 0.102"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="j5_Link" />
+    <child
+      link="j6_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.0543"
+      upper="3.0543"
+      effort="28"
+      velocity="3.2" />
+    <calibration
+      rising="0"
+      falling="0" />
+    <dynamics
+      damping="0"
+      friction="0" />
+    <safety_controller
+      soft_lower_limit="-3.0543"
+      soft_upper_limit="3.0543"
+      k_position="15"
+      k_velocity="10" />
+  </joint>
+  
+  <link
+    name="hand_base_link">
+    <inertial>
+      <origin
+        xyz="1.045 -0.01 -0.1"
+        rpy="0 0 0" />
+      <mass
+        value="1.415640442478951" />
+      <inertia
+        ixx="0.00019621588068043"
+        ixy="-2.95674210904856E-07"
+        ixz="-1.95611838748227E-08"
+        iyy="0.000433342528155916"
+        iyz="2.12715894328206E-08"
+        izz="0.000396532471899526" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0.04 -0.005 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/hand_base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0.04 -0.005 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/hand_base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_hand_joint" type="fixed">
+    <origin xyz="0 0 0.12" rpy="0 0 3.14159" />
+    <parent link="j6_Link" />
+    <child link="hand_base_link" />
+    <axis xyz="0 0 0" />
+  <limit lower="-2.79" upper="2.79" effort="100"/>
+  </joint>
+  <link
+    name="finger_link1">
+    <inertial>
+      <origin
+        xyz="-0.0765920818887161 0.0785524897759977 0.00485564932597477"
+        rpy="0 0 0" />
+      <mass
+        value="0.0589543896992846" />
+      <inertia
+        ixx="2.37128965154064E-05"
+        ixy="4.94815116549898E-06"
+        ixz="-3.83269385718325E-06"
+        iyy="1.98369145830284E-05"
+        iyz="4.62772008724202E-06"
+        izz="3.37272907966157E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/finger_link1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/finger_link1.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint
+    name="fj1"
+    type="prismatic">
+    <origin
+      xyz="0.0445 0 0"
+      rpy="1.5708 0 0" />
+    <parent
+      link="hand_base_link" />
+    <child
+      link="finger_link1" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0.04"
+      effort="40"
+      velocity="1" />
+  </joint>
+  <link
+    name="finger_link2">
+    <inertial>
+      <origin
+        xyz="-0.0765920818887161 0.0800524897759977 0.00485564932597478"
+        rpy="0 0 0" />
+      <mass
+        value="0.0589543896992846" />
+      <inertia
+        ixx="2.37128965154064E-05"
+        ixy="4.94815116549897E-06"
+        ixz="-3.83269385718325E-06"
+        iyy="1.98369145830285E-05"
+        iyz="4.62772008724202E-06"
+        izz="3.37272907966157E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/finger_link2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fr5_description/meshes/finger_link2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fj2"
+    type="prismatic">
+    <origin
+      xyz="-0.0425 0.0087157 -0.0015"
+      rpy="1.5708 0 3.1416" />
+    <parent
+      link="hand_base_link" />
+    <child
+      link="finger_link2" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0.04"
+      effort="40"
+      velocity="1" />
+  </joint>
+
+
+
+</robot>
