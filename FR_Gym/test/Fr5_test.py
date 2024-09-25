@@ -18,8 +18,6 @@ if __name__ == '__main__':
     env = FR5_Env(gui=args.gui)
     env.render()
     model = PPO.load(args.model_path)
-    # model = TD3.load("F:\\Pycharm_project\\RL\\models\\TD3\\TD3-run-eposide270.zip")
-    # model = DDPG.load("F:\\Pycharm_project\\RL\\models\\DDPG\\DDPG-run-eposide282.zip")
     test_num = args.test_num  # 测试次数
     success_num = 0  # 成功次数
     print("测试次数：",test_num)

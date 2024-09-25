@@ -64,6 +64,7 @@ if __name__ == '__main__':
     # HACK
     # Define and Train the agent
     model = PPO("MlpPolicy", env, verbose=1, tensorboard_log=logs_dir,batch_size=256,device="cuda")
+    # model = SAC("MlpPolicy",env, verbose=1, tensorboard_log=logs_dir,batch_size=256,device="cuda",gamma = 0.9,learning_rate = 0.00001)
     # model = PPO(policy = "MlpPolicy",
     #         env = env,
     #         learning_rate = 0.0003,
@@ -88,7 +89,6 @@ if __name__ == '__main__':
     #         seed = None,
     #         device = "cuda",
     #         _init_setup_model = True)
-    # model = PPO.load("F:\\Pycharm_project\\RL\\models\\PPO\\1211-140713\\best_model.zip",env=env,print_system_info=True)
 
     model.set_logger(new_logger)
     tensorboard_callback = TensorboardCallback()
