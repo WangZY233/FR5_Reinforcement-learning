@@ -7,17 +7,17 @@
 import sys
 sys.path.append(r"FR5_Reinforcement-learning\utils")
 sys.path.append("FR5_Reinforcement-learning\FR_Gym")
-
 from stable_baselines3 import A2C,PPO,DDPG,TD3
-from Fr5_env import FR5_Env
+sys.path.append('..')
+from FR_Gym import FR5_Env
 import time
-from arguments import get_args
+from utils.arguments import get_args
 
 if __name__ == '__main__':
     args, kwargs = get_args()
-    env = FR5_Env(gui=args.gui)
+    env = FR5_Env(gui=True)
     env.render()
-    model = PPO.load(args.model_path)
+    model = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1009-200624/best_model.zip")
     # model = TD3.load("F:\\Pycharm_project\\RL\\models\\TD3\\TD3-run-eposide270.zip")
     # model = DDPG.load("F:\\Pycharm_project\\RL\\models\\DDPG\\DDPG-run-eposide282.zip")
     test_num = args.test_num  # 测试次数

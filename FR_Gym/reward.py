@@ -84,9 +84,9 @@ def cal_success_reward(self,distance):
     
     # 机械臂夹爪接触目标
     elif gripper_contact:
-        success_reward = - 80
-        self.terminated = True
-        logger.info("失败！机械臂抓夹接触目标!  执行步数：%s    距离目标:%s"%(self.step_num, distance))
+        success_reward = - 20
+        # self.terminated = True
+        # logger.info("失败！机械臂抓夹接触目标!  执行步数：%s    距离目标:%s"%(self.step_num, distance))
 
     # 机械臂执行步数过多
     elif self.step_num > 100:

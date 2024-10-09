@@ -22,7 +22,7 @@ from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.callbacks import EvalCallback,CallbackList,BaseCallback,CheckpointCallback
 from Callback import TensorboardCallback
 from loguru import logger
-from arguments import get_args
+from utils.arguments import get_args
 
 now = time.strftime('%m%d-%H%M%S', time.localtime())
 args, kwargs = get_args()
@@ -88,7 +88,7 @@ if __name__ == '__main__':
     #         seed = None,
     #         device = "cuda",
     #         _init_setup_model = True)
-    # model = PPO.load("F:\\Pycharm_project\\RL\\models\\PPO\\1211-140713\\best_model.zip",env=env,print_system_info=True)
+    model = PPO.load(r"/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1008-221145/best_model",env=env,print_system_info=True)
 
     model.set_logger(new_logger)
     tensorboard_callback = TensorboardCallback()
@@ -110,5 +110,5 @@ if __name__ == '__main__':
                     )
         
         # 保存模型
-        model.save(models_dir+f"/PPO-run-eposide{eposide}")
+        model.save(models_dir+f"\PPO-run-eposide{eposide}")
         logger.info(f"**************eposide--{eposide} saved**************")

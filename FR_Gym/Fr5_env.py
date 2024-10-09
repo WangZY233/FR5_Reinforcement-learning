@@ -33,8 +33,8 @@ class FR5_Env(gym.Env):
         # self.last_success = False
 
         # 设置最小的关节变化量
-        low_action = np.array([-1.0,-1.0,-1.0,-1.0,-1.0,-1.0])
-        high_action = np.array([1.0,1.0,1.0,1.0,1.0,1.0])
+        low_action = np.array([-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0])
+        high_action = np.array([1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0])
         self.action_space = spaces.Box(low=low_action, high=high_action, dtype=np.float32)
 
         low = np.zeros((1,12),dtype=np.float32)
@@ -59,26 +59,36 @@ class FR5_Env(gym.Env):
             仿真环境初始化
         '''
         # boxId = self.p.loadURDF("plane.urdf")
+
         # 创建机械臂
-        self.fr5 = self.p.loadURDF("FR5_Reinforcement-learning/fr5_description/urdf/fr5v6.urdf",useFixedBase=True, basePosition=[0, 0, 0],
-                              baseOrientation=p.getQuaternionFromEuler([0, 0, np.pi]),flags = p.URDF_USE_SELF_COLLISION)
+        self.fr5 = self.p.loadURDF(
+            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning/fr5_description/urdf/fr5v6.urdf",
+            useFixedBase=True, basePosition=[0, 0, 0],
+            baseOrientation=p.getQuaternionFromEuler([0, 0, np.pi]),
+            flags=p.URDF_USE_SELF_COLLISION
+        )
 
         # 创建桌子
-        self.table = p.loadURDF("table/table.urdf", basePosition=[0, 0.5, -0.63],baseOrientation=p.getQuaternionFromEuler([0, 0, np.pi/2]))
+        self.table = p.loadURDF("table/table.urdf", basePosition=[0, 0.5, -0.63],
+                                baseOrientation=p.getQuaternionFromEuler([0, 0, np.pi / 2]))
 
         # 创建目标
         collisionTargetId = self.p.createCollisionShape(shapeType=p.GEOM_CYLINDER,
                                           radius=0.02,height = 0.05)
         self.target = self.p.createMultiBody(baseMass=0,  # 质量
                            baseCollisionShapeIndex=collisionTargetId,
-                           basePosition=[0.5, 0.5, 2]) 
-        
+                           basePosition=[0.5, 0.5, 2])
+        p.changeDynamics(self.target, -1, lateralFriction=10.0,spinningFriction=1, rollingFriction=1)
+        # self.target = self.p.loadURDF(
+        #     "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning/fr5_description/urdf/box.urdf",
+        #     basePosition=[0.5, 0.5, 2])
+
         # 创建目标杯子的台子
         collisionTargetId = self.p.createCollisionShape(shapeType=p.GEOM_CYLINDER,
-                                            radius=0.03,height = 0.3)
+                                                        radius=0.03, height=0.3)
         self.targettable = self.p.createMultiBody(baseMass=0,  # 质量
-                            baseCollisionShapeIndex=collisionTargetId,
-                            basePosition=[0.5, 0.5, 2])                                                          
+                                                  baseCollisionShapeIndex=collisionTargetId,
+                                                  basePosition=[0.5, 0.5, 2])
 
     def step(self, action):
         '''step'''
@@ -86,25 +96,32 @@ class FR5_Env(gym.Env):
         # Execute one time step within the environment
         # 初始化关节角度列表
         joint_angles = []
+        # 初始化夹爪位置
+        gripper = []
 
         # 获取每个关节的状态
-        for i in [1,2,3,4,5,6]:
+        for i in [1, 2, 3, 4, 5, 6]:
             joint_info = p.getJointState(self.fr5, i)
             joint_angle = joint_info[0]  # 第一个元素是当前关节角度
             joint_angles.append(joint_angle)
 
+
         # 执行action
-        Fr5_joint_angles = np.array(joint_angles)+(np.array(action[0:6])/180*np.pi)
-        gripper = np.array([0,0])
-        anglenow = np.hstack([Fr5_joint_angles,gripper])
-        p.setJointMotorControlArray(self.fr5,[1,2,3,4,5,6,8,9],p.POSITION_CONTROL,targetPositions=anglenow)
-        
+        Fr5_joint_angles = np.array(joint_angles) + (np.array(action[0:6]) / 180 * np.pi)
+        if action[6] > 0:
+            gripper = np.array([0.02, 0.02])
+        else:
+            gripper = np.array([0, 0])
+
+        anglenow = np.hstack([Fr5_joint_angles, gripper])
+        p.setJointMotorControlArray(self.fr5, [1, 2, 3, 4, 5, 6, 8, 9], p.POSITION_CONTROL, targetPositions=anglenow)
+
         for _ in range(20):
             self.p.stepSimulation()
             # time.sleep(1./240.)
 
-        self.reward,info = grasp_reward(self)
-        
+        self.reward, info = grasp_reward(self)
+
         # observation计算
         self.get_observation()
 
@@ -191,7 +208,7 @@ class FR5_Env(gym.Env):
                                         (self.target_position[1]-0.6)/0.2,
                                         (self.target_position[2]-0.1)/0.2],dtype=np.float32)
 
-        self.observation = np.hstack((obs_gripper_centre_pos,obs_joint_angles,obs_target_position),dtype=np.float32).flatten()
+        self.observation = np.hstack((obs_gripper_centre_pos,obs_joint_angles,obs_target_position)).flatten()
 
         self.observation = self.observation.flatten()
         self.observation = self.observation.reshape(1,12)
