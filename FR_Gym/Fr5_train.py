@@ -11,7 +11,7 @@ import sys
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 sys.path.append(r"FR5_Reinforcement-learning\utils")
 
-from stable_baselines3 import A2C,PPO,DDPG,TD3,SAC
+from stable_baselines3 import A2C,PPO,DDPG,TD3,SAC,DQN
 from stable_baselines3.common.vec_env import DummyVecEnv,SubprocVecEnv
 from Fr5_env import FR5_Env
 import time
@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
     # HACK
     # Define and Train the agent
-    model = PPO("MlpPolicy", env, verbose=1, tensorboard_log=logs_dir,batch_size=256,device="cuda")
+    model = PPO("MlpPolicy", env, verbose=1, tensorboard_log=logs_dir, device="cuda")
     # model = PPO(policy = "MlpPolicy",
     #         env = env,
     #         learning_rate = 0.0003,
@@ -88,7 +88,7 @@ if __name__ == '__main__':
     #         seed = None,
     #         device = "cuda",
     #         _init_setup_model = True)
-    model = PPO.load(r"/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1008-221145/best_model",env=env,print_system_info=True)
+    model = PPO.load(r"/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1028-163113/best_model.zip",env=env,print_system_info=True)
 
     model.set_logger(new_logger)
     tensorboard_callback = TensorboardCallback()
@@ -110,5 +110,5 @@ if __name__ == '__main__':
                     )
         
         # 保存模型
-        model.save(models_dir+f"\PPO-run-eposide{eposide}")
+        model.save(models_dir+f"/PPO-run-eposide{eposide}")
         logger.info(f"**************eposide--{eposide} saved**************")
