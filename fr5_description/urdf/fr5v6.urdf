@@ -516,43 +516,40 @@
   </joint>
   <link
     name="finger_link1">
-    <inertial>
+        <inertial>
       <origin
         xyz="-0.0765920818887161 0.0785524897759977 0.00485564932597477"
         rpy="0 0 0" />
-      <mass
-        value="0.0589543896992846" />
-      <inertia
-        ixx="2.37128965154064E-05"
-        ixy="4.94815116549898E-06"
-        ixz="-3.83269385718325E-06"
-        iyy="1.98369145830284E-05"
-        iyz="4.62772008724202E-06"
-        izz="3.37272907966157E-05" />
+      <mass value="1"/>
+      <inertia ixx="0.02" ixy="0" ixz="0" iyy="0.05" iyz="0" izz="0.05"/>
     </inertial>
     <visual>
       <origin
-        xyz="0 0 0"
+        xyz="-0.08 0.10 -0.004"
         rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://fr5_description/meshes/finger_link1.STL" />
+        <box size="0.01 0.08 0.03"/>
       </geometry>
       <material
         name="">
         <color
-          rgba="1 1 1 1" />
+          rgba="0.89804 0.91765 0.92941 1" />
       </material>
     </visual>
     <collision>
       <origin
-        xyz="0 0 0"
+        xyz="-0.08 0.10 -0.004"
         rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://fr5_description/meshes/finger_link1.STL" />
+        <box size="0.01 0.08 0.03"/>
       </geometry>
     </collision>
+    <contact>
+      <lateral_friction value="10"/>
+      <rolling_friction value="0"/>
+      <spinning_friction value="0"/>
+      <restitution value="1"/>
+    </contact>
   </link>
 
   <joint
@@ -570,8 +567,8 @@
     <limit
       lower="0"
       upper="0.04"
-      effort="40"
-      velocity="1" />
+      effort="200"
+      velocity="0.0001" />
   </joint>
   <link
     name="finger_link2">
@@ -579,39 +576,36 @@
       <origin
         xyz="-0.0765920818887161 0.0800524897759977 0.00485564932597478"
         rpy="0 0 0" />
-      <mass
-        value="0.0589543896992846" />
-      <inertia
-        ixx="2.37128965154064E-05"
-        ixy="4.94815116549897E-06"
-        ixz="-3.83269385718325E-06"
-        iyy="1.98369145830285E-05"
-        iyz="4.62772008724202E-06"
-        izz="3.37272907966157E-05" />
+      <mass value="1"/>
+      <inertia ixx="0.02" ixy="0" ixz="0" iyy="0.05" iyz="0" izz="0.05"/>
     </inertial>
     <visual>
       <origin
-        xyz="0 0 0"
+        xyz="-0.08 0.10 -0.004"
         rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://fr5_description/meshes/finger_link2.STL" />
+        <box size="0.01 0.08 0.03"/>
       </geometry>
       <material
         name="">
         <color
-          rgba="1 1 1 1" />
+          rgba="0.89804 0.91765 0.92941 1" />
       </material>
     </visual>
     <collision>
       <origin
-        xyz="0 0 0"
+        xyz="-0.08 0.10 -0.004"
         rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://fr5_description/meshes/finger_link2.STL" />
+        <box size="0.01 0.08 0.03"/>
       </geometry>
     </collision>
+    <contact>
+      <lateral_friction value="10"/>
+      <rolling_friction value="0"/>
+      <spinning_friction value="0"/>
+      <restitution value="1"/>
+    </contact>
   </link>
   <joint
     name="fj2"
@@ -628,10 +622,7 @@
     <limit
       lower="0"
       upper="0.04"
-      effort="40"
-      velocity="1" />
+      effort="200"
+      velocity="0.0001" />
   </joint>
-
-
-
 </robot>
