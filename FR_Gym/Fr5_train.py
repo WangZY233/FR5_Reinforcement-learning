@@ -9,7 +9,6 @@
 import os
 import sys
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
-sys.path.append(r"FR5_Reinforcement-learning\utils")
 
 from stable_baselines3 import A2C,PPO,DDPG,TD3,SAC,DQN
 from stable_baselines3.common.vec_env import DummyVecEnv,SubprocVecEnv
@@ -36,7 +35,7 @@ test = args.test
 def make_env(i):
     def _init():
         if i == 0:
-            env = FR5_Env(gui=True)
+            env = FR5_Env(gui=False)
         else:
             env = FR5_Env(gui=False)
         env = Monitor(env, logs_dir)
@@ -88,7 +87,7 @@ if __name__ == '__main__':
     #         seed = None,
     #         device = "cuda",
     #         _init_setup_model = True)
-    model = PPO.load(r"/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1028-163113/best_model.zip",env=env,print_system_info=True)
+    # model = PPO.load(r"/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/步骤二成功1/models/PPO/1113-145119/PPO-run-eposide120.zip", env=env, print_system_info=True)
 
     model.set_logger(new_logger)
     tensorboard_callback = TensorboardCallback()
@@ -108,7 +107,7 @@ if __name__ == '__main__':
                     callback=CallbackList([eval_callback,tensorboard_callback]),  # 在每一步调用的回调，可以用CheckpointCallback来创建一个存档点和规定存档间隔。
                     log_interval=10  #  记录一次信息的时间步数
                     )
-        
+        print("model_dir:",models_dir)
         # 保存模型
         model.save(models_dir+f"/PPO-run-eposide{eposide}")
         logger.info(f"**************eposide--{eposide} saved**************")

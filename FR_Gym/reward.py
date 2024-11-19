@@ -21,62 +21,26 @@ def cal_success_reward(self, distance):
     # 若机械臂发生其他碰撞（桌子或其他关节碰撞目标），那么任务失败
     gripper_joint_indices = [8, 9]
     target_contact_points = p.getContactPoints(bodyA=self.fr5, bodyB=self.target)
-    table_contact_points = p.getContactPoints(bodyA=self.fr5, bodyB=self.table)
-    self_targettable_contact_points = p.getContactPoints(bodyA=self.fr5, bodyB=self.targettable)
+    fr5_table_contact_points = p.getContactPoints(bodyA=self.fr5, bodyB=self.table)
+    target_table_contact_points = p.getContactPoints(bodyA=self.target, bodyB=self.table)
     # self_obstacle_contact_points = p.getContactPoints(bodyA=self.fr5, bodyB=self.obstacle)
 
     # 定义碰撞变量
     gripper_contact = False
     other_contact = False
-    target_contact = False
-    targettable_contact = False
+    fr5_target_contact = False
+    target_table_contact = False
     left_contact = False
     right_contact = False
     both_contact = False
+    table_contact = False
 
-    # 机械臂关节碰撞目标
-    for contact_point in target_contact_points:
-        link_index = contact_point[3]
-        if link_index == 8 or link_index == 9:
-            gripper_contact = True
-            # logger.info("机械臂抓夹接触目标!")
-        # 检查是否有非夹爪关节接触目标
-        if link_index not in gripper_joint_indices and gripper_contact == False:
-            target_contact = True
-            # logger.info("机械臂接触目标！")
-
-    # 两个夹爪同时接触目标
-    for contact_point in target_contact_points:
-        link_index = contact_point[3]
-        if link_index == 8:
-            left_contact = True
-        if link_index == 9:
-            right_contact = True
-
-    if left_contact == True and right_contact == True:
-        joint_info = p.getJointState(self.fr5, 8)
-        joint_angle = joint_info[0]  # 第一个元素是当前关节角度
-        if joint_angle > 0.01:
-            both_contact = True
-            logger.info("两个夹爪夹住目标！")
-        logger.info("两个夹爪同时接触目标！")
 
     # 碰撞桌子
-    for contact_point in table_contact_points:
+    for contact_point in fr5_table_contact_points or target_table_contact_points:
         link_index = contact_point[3]
         if not (link_index == 0 or link_index == 1):
-            other_contact = True
             table_contact = True
-            # logger.info("碰撞桌子！")
-
-    # 碰撞目标杯子的台子
-    for contact_point in self_targettable_contact_points:
-        other_contact = True
-        targettable_contact = True
-        # logger.info("碰撞目标杯子的台子! ")
-
-    # all:判断成功或失败
-    # 并计算成功或失败的奖励
 
     success_reward = 0
     # 夹爪中心和目标之间距离小于一定值，则任务成功
@@ -88,27 +52,12 @@ def cal_success_reward(self, distance):
         # self.truncated = True
 
     # 碰撞桌子，或者碰撞自身，或者碰撞台子
-    elif other_contact:
+    elif table_contact:
         success_reward = - 10
-        if targettable_contact == True:
-            self.terminated = True
-            logger.info("失败！碰撞目标杯子的台子! 执行步数：%s    距离目标:%s" % (self.step_num, distance))
-        else:
-            self.terminated = True
-            logger.info("失败！碰撞桌子！ 执行步数：%s    距离目标:%s" % (self.step_num, distance))
+        self.terminated = True
+        logger.info("失败！碰撞目标杯子的台子! 执行步数：%s    距离目标:%s" % (self.step_num, distance))
+        logger.info("碰撞桌子！")
         # self.truncated = True
-
-    # 机械臂关节接触目标
-    elif target_contact:
-        success_reward = - 10
-        self.terminated = True
-        logger.info("失败！机械臂接触目标！ 执行步数：%s    距离目标:%s" % (self.step_num, distance))
-
-    # 机械臂夹爪接触目标
-    elif gripper_contact:
-        success_reward = - 20
-        self.terminated = True
-        # logger.info("失败！机械臂抓夹接触目标!  执行步数：%s    距离目标:%s"%(self.step_num, distance))
 
     # 机械臂执行步数过多
     if self.step_num > 100:
@@ -141,13 +90,11 @@ def cal_pose_reward(self):
     gripper_orientation = p.getLinkState(self.fr5, 7)[1]
     gripper_orientation = R.from_quat(gripper_orientation)
     gripper_orientation = gripper_orientation.as_euler('xyz', degrees=True)
-    # print("夹爪旋转角度： ",gripper_orientation)
     # 计算夹爪的姿态奖励
     pose_reward = -(
                 pow(gripper_orientation[0] + 90, 2) + pow(gripper_orientation[1], 2) + pow(gripper_orientation[2], 2))
     # logger.debug("姿态奖励：%f"%pose_reward)
     return pose_reward * 0.01
-
 
 def grasp_reward(self):
     '''获取奖励'''
@@ -155,13 +102,14 @@ def grasp_reward(self):
     total_reward = 0
 
     distance = get_distance(self)
+    pose_reward = cal_pose_reward(self)
     real_distance = get_real_distance(self)
-    judge_success(self, real_distance, success_dis=0.02)
+    judge_success(self, distance, pose_reward, success_dis=0.01, success_pose = -50)
 
     # 计算奖励
     success_reward = cal_success_reward(self, distance)
     distance_reward = cal_dis_reward(self, distance)
-    pose_reward = cal_pose_reward(self)
+
 
     total_reward = success_reward + pose_reward + distance_reward
 
@@ -178,10 +126,13 @@ def grasp_reward(self):
     return total_reward, info
 
 
-def judge_success(self, distance, success_dis):
+def judge_success(self, distance, pose, success_dis, success_pose):
     '''判断成功或失败'''
     if distance < success_dis:
-        self.success = True
+        if pose > success_pose:
+            self.success = True
+        else:
+            self.success = False
     else:
         self.success = False
         # total_reward = total_reward + (0.3 - distance)
@@ -198,9 +149,9 @@ def get_distance(self):
     rotated_relative_position = rotation.apply(relative_position)
     gripper_centre_pos = [Gripper_posx, Gripper_posy, Gripper_posz] + rotated_relative_position
     self.target_position = np.array(p.getBasePositionAndOrientation(self.target)[0])
-    distance = math.sqrt((gripper_centre_pos[0] - self.ori_target_position[0]) ** 2 +
-                         (gripper_centre_pos[1] - self.ori_target_position[1]) ** 2 +
-                         (gripper_centre_pos[2] - self.ori_target_position[2]) ** 2)
+    distance = math.sqrt((gripper_centre_pos[0] - self.goalx[0]) ** 2 +
+                         (gripper_centre_pos[1] - self.goaly[0]) ** 2 +
+                         (gripper_centre_pos[2] - self.goalz[0]) ** 2)
     # logger.debug("distance:%s"%str(distance))
     return distance
 

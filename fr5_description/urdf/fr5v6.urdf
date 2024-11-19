@@ -565,10 +565,10 @@
     <axis
       xyz="1 0 0" />
     <limit
-      lower="0"
+      lower="-0.05"
       upper="0.04"
-      effort="200"
-      velocity="0.0001" />
+      effort="20"
+      velocity="0.1" />
   </joint>
   <link
     name="finger_link2">
@@ -620,9 +620,9 @@
     <axis
       xyz="1 0 0" />
     <limit
-      lower="0"
+      lower="-0.05"
       upper="0.04"
-      effort="200"
-      velocity="0.0001" />
+      effort="20"
+      velocity="0.1" />
   </joint>
 </robot>

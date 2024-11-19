@@ -3,7 +3,7 @@
  * @Date: 2024-04-10 21:59:04
  * @LastEditors: wangziyuan 13536655301
  * @LastEditTime: 2024-04-22 20:41:18
- * @FilePath: \RL_FR5\FR5_Reinforcement-learning\README.md
+ * @FilePath: \RL_FR5\first_step\README.md
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 # FR_Reinforcement learning

@@ -6,8 +6,8 @@
 '''
 import sys
 
-sys.path.append(r"FR5_Reinforcement-learning\utils")
-sys.path.append("FR5_Reinforcement-learning\FR_Gym")
+sys.path.append(r"first_step\utils")
+sys.path.append("first_step\FR_Gym")
 from stable_baselines3 import A2C, PPO, DDPG, TD3
 
 sys.path.append('..')
@@ -19,7 +19,7 @@ if __name__ == '__main__':
     args, kwargs = get_args()
     env = FR5_Env(gui=True)
     env.render()
-    model = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1028-163113/best_model.zip")
+    model = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1117-204243/best_model.zip")
     # model = TD3.load("F:\\Pycharm_project\\RL\\models\\TD3\\TD3-run-eposide270.zip")
     # model = DDPG.load("F:\\Pycharm_project\\RL\\models\\DDPG\\DDPG-run-eposide282.zip")
     test_num = args.test_num  # 测试次数
@@ -35,10 +35,10 @@ if __name__ == '__main__':
         while not done:
             step += 1
             # action = env.action_space.sample()     # 随机采样动作
-            print("state:", state)
+            # print("state:", state)
             action, _ = model.predict(observation=state,deterministic=True)
 
-            print("action:",action)
+            # print("action:",action)
             # if step % 40 == 0:
             #     env.moveTarget()
             state, reward, done, _, info = env.step(action=action)
