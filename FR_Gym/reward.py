@@ -23,7 +23,7 @@ def cal_success_reward(self, distance):
     target_contact_points = p.getContactPoints(bodyA=self.fr5, bodyB=self.target)
     fr5_table_contact_points = p.getContactPoints(bodyA=self.fr5, bodyB=self.table)
     target_table_contact_points = p.getContactPoints(bodyA=self.target, bodyB=self.table)
-    # self_obstacle_contact_points = p.getContactPoints(bodyA=self.fr5, bodyB=self.obstacle)
+    self_obstacle_contact_points = p.getContactPoints(bodyA=self.fr5, bodyB=self.obstacle)
 
     # 定义碰撞变量
     gripper_contact = False
@@ -34,17 +34,30 @@ def cal_success_reward(self, distance):
     right_contact = False
     both_contact = False
     table_contact = False
+    obstacle_contact = False
 
 
     # 碰撞桌子
-    for contact_point in fr5_table_contact_points or target_table_contact_points:
+    for contact_point in fr5_table_contact_points:
         link_index = contact_point[3]
         if not (link_index == 0 or link_index == 1):
             table_contact = True
 
+    # 碰撞障碍物
+    if self_obstacle_contact_points:
+        obstacle_contact = True
+
+    # 碰撞目标
+    for contact_point in target_contact_points:
+        link_index = contact_point[3]
+        if link_index in gripper_joint_indices:
+            gripper_contact = True
+        else:
+            other_contact = True
+
     success_reward = 0
     # 夹爪中心和目标之间距离小于一定值，则任务成功
-    if self.success == True and self.step_num <= 100:
+    if self.success == True and self.step_num <= 100 and gripper_contact:
         success_reward = 1000
         self.terminated = True
         self.success = True
@@ -55,13 +68,24 @@ def cal_success_reward(self, distance):
     elif table_contact:
         success_reward = - 10
         self.terminated = True
-        logger.info("失败！碰撞目标杯子的台子! 执行步数：%s    距离目标:%s" % (self.step_num, distance))
+        # logger.info("失败！碰撞目标杯子的台子! 执行步数：%s    距离目标:%s" % (self.step_num, distance))
         logger.info("碰撞桌子！")
         # self.truncated = True
+    elif obstacle_contact:
+        success_reward = - 10
+        self.terminated = True
+        logger.info("碰撞障碍物！ 执行步数：%s    距离目标:%s" % (self.step_num, distance))
+        # self.truncated = True
+    elif other_contact:
+        success_reward = - 10
+        self.terminated = True
+        logger.info("失败！碰撞其他物体！ 执行步数：%s    距离目标:%s" % (self.step_num, distance))
+        # self.truncated = True
+
 
     # 机械臂执行步数过多
     if self.step_num > 100:
-        success_reward = - 100
+        success_reward = - 1
         self.terminated = True
         logger.info("失败！执行步数过多！ 执行步数：%s    距离目标:%s" % (self.step_num, distance))
 
@@ -104,7 +128,7 @@ def grasp_reward(self):
     distance = get_distance(self)
     pose_reward = cal_pose_reward(self)
     real_distance = get_real_distance(self)
-    judge_success(self, distance, pose_reward, success_dis=0.01, success_pose = -50)
+    judge_success(self, distance, pose_reward, success_dis=0.01, success_pose = -100)
 
     # 计算奖励
     success_reward = cal_success_reward(self, distance)
@@ -143,15 +167,15 @@ def get_distance(self):
     Gripper_posx = p.getLinkState(self.fr5, 6)[0][0]
     Gripper_posy = p.getLinkState(self.fr5, 6)[0][1]
     Gripper_posz = p.getLinkState(self.fr5, 6)[0][2]
-    relative_position = np.array([0, 0, 0.15])
+    relative_position = np.array([0, 0, 0.183])
     # 固定夹爪相对于机械臂末端的相对位置转换
     rotation = R.from_quat(p.getLinkState(self.fr5, 7)[1])
     rotated_relative_position = rotation.apply(relative_position)
     gripper_centre_pos = [Gripper_posx, Gripper_posy, Gripper_posz] + rotated_relative_position
     self.target_position = np.array(p.getBasePositionAndOrientation(self.target)[0])
-    distance = math.sqrt((gripper_centre_pos[0] - self.goalx[0]) ** 2 +
-                         (gripper_centre_pos[1] - self.goaly[0]) ** 2 +
-                         (gripper_centre_pos[2] - self.goalz[0]) ** 2)
+    distance = math.sqrt((gripper_centre_pos[0] - self.goalx) ** 2 +
+                         ((gripper_centre_pos[1] - self.goaly) ** 2) +
+                         (gripper_centre_pos[2] - self.goalz) ** 2)
     # logger.debug("distance:%s"%str(distance))
     return distance
 

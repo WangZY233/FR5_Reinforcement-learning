@@ -18,7 +18,7 @@ import time
 from stable_baselines3.common.utils import set_random_seed
 from stable_baselines3.common.logger import configure
 from stable_baselines3.common.monitor import Monitor
-from stable_baselines3.common.callbacks import EvalCallback,CallbackList,BaseCallback,CheckpointCallback
+from stable_baselines3.common.callbacks import EvalCallback, CallbackList, BaseCallback, CheckpointCallback
 from Callback import TensorboardCallback
 from loguru import logger
 from utils.arguments import get_args
@@ -35,7 +35,7 @@ test = args.test
 def make_env(i):
     def _init():
         if i == 0:
-            env = FR5_Env(gui=False)
+            env = FR5_Env(gui=True)
         else:
             env = FR5_Env(gui=False)
         env = Monitor(env, logs_dir)
@@ -87,7 +87,7 @@ if __name__ == '__main__':
     #         seed = None,
     #         device = "cuda",
     #         _init_setup_model = True)
-    # model = PPO.load(r"/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/步骤二成功1/models/PPO/1113-145119/PPO-run-eposide120.zip", env=env, print_system_info=True)
+    model = PPO.load(r"/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1127-152446/best_model.zip", env=env, print_system_info=True)
 
     model.set_logger(new_logger)
     tensorboard_callback = TensorboardCallback()
