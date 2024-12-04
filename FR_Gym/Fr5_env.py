@@ -74,24 +74,42 @@ class FR5_Env(gym.Env):
         self.table = p.loadURDF("table/table.urdf", basePosition=[0, 0.5, -0.63],
                                 baseOrientation=p.getQuaternionFromEuler([0, 0, np.pi / 2]))
 
-        # 创建目标
-        self.cup_height = 0.01
-        self.key_height = 0.3
-        collisionTargetId = self.p.createCollisionShape(shapeType=p.GEOM_CYLINDER,
-                                                        radius=0.015, height=self.cup_height)
+        # 创建按钮
+        self.button_length = 0.01
+        self.button_height = 0.3
+        buttonId = self.p.createCollisionShape(shapeType=p.GEOM_CYLINDER,
+                                                        radius=0.015, height=self.button_length)
 
-        self.target = self.p.createMultiBody(baseMass=0,  # 质量
+
+        self.button = self.p.createMultiBody(baseMass=0,  # 质量
+                                             baseCollisionShapeIndex=buttonId,
+                                             basePosition=[0.5, 0.5, 2])
+
+        # 创建目标
+        self.cup_height = 0.1
+        collisionTargetId = self.p.createCollisionShape(shapeType=p.GEOM_CYLINDER,
+                                                        radius=0.025, height=self.cup_height)
+
+        self.target = self.p.createMultiBody(baseMass=0.2,  # 质量
                                              baseCollisionShapeIndex=collisionTargetId,
                                              basePosition=[0.5, 0.5, 2])
         # self.target = self.p.loadURDF(
         #     "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/fr5_description/urdf/woshidhg.urdf",
         #     basePosition=[0.5, 0.5, 2])
-        self.grasp_effort =[0.030, 0.030]
+        self.grasp_effort =[0.0030, 0.0030]
         p.changeDynamics(self.target, -1, lateralFriction=10.0, spinningFriction=1, rollingFriction=1)
 
         # self.targettable = self.p.loadURDF(
         #     "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/fr5_description/urdf/woshidhg.urdf",
         #     basePosition=[0.5, 0.5, 2])
+
+        # 创建目标杯子的台子
+        self.targettable_height = 0.04
+        tableId = self.p.createCollisionShape(shapeType=p.GEOM_CYLINDER,
+                                                        radius=0.04, height=self.targettable_height)
+        self.targettable = self.p.createMultiBody(baseMass=0,  # 质量
+                                                  baseCollisionShapeIndex=tableId,
+                                                  basePosition=[0.5, 0.5, 2])
 
         # # 创建障碍物
         self.obstacle_wide = 0.05
@@ -123,9 +141,9 @@ class FR5_Env(gym.Env):
         Fr5_joint_angles = np.array(joint_angles[:6]) + (np.array(action[0:6]) / 180 * np.pi)
 
         if action[6] > 0:
-            gripper = np.array(self.grasp_effort)
+            gripper = np.array([0,0])
         else:
-            gripper = np.array(self.grasp_effort)
+            gripper = np.array([0,0])
 
         anglenow = np.hstack([Fr5_joint_angles, gripper])
         anglenow[5] = 0
@@ -185,87 +203,86 @@ class FR5_Env(gym.Env):
         for i in range(20):
             self.p.stepSimulation()
         self.p.resetBasePositionAndOrientation(self.obstacle, self.base_position, [0, 0, 0, 1])
-        # error_contact_points = p.getContactPoints(bodyA=self.fr5, bodyB=self.fr5)
-        # for contact_point in error_contact_points:
-        #     link_index = contact_point[3]
-        #     if link_index == 7 or link_index == 8:
-        #         logger.info("夹爪干涉出现！")
-        #         self.flashUR5()
-        #         for i in range(10):
-        #             self.p.stepSimulation()
-        #         break
+        error_contact_points = p.getContactPoints(bodyA=self.fr5, bodyB=self.fr5)
+        for contact_point in error_contact_points:
+            link_index = contact_point[3]
+            if link_index == 7 or link_index == 8:
+                logger.info("夹爪干涉出现！")
+                self.flashUR5()
+                for i in range(10):
+                    self.p.stepSimulation()
+                break
 
-        # # 重新设置夹爪位置
-        # # 随机生成初始位置
-        # if np.random.uniform(0, 1) > 0.5:
-        #     euler_z = np.random.uniform(0.1, 0.5, 1)
-        # else:
-        #     euler_z = np.random.uniform(-0.1, -0.5, 1)
-        #
-        # init_x = np.random.uniform(-0.2, 0.2, 1)
-        # init_y = np.random.uniform(0.5, 0.6, 1)
-        # init_z = 0.1
-        #
-        # Euler = [-1.578253446554462, 3.14159, euler_z[0]]
-        # orn = p.getQuaternionFromEuler(Euler)
-        # pos = [init_x[0], init_y[0], init_z]
-        #
-        # # lower limits for null space
-        # # ll = [-3.0543, -4.6251, -2.8274, -4.6251, -3.0543, -3.0543]
+        # 重新设置夹爪位置
+        # 随机生成初始位置
+        euler_z = np.random.uniform(-0.1, 0.1, 1)
+        self.button_height = np.random.uniform(0.25, 0.3, 1)[0]
+        init_x = np.random.uniform(-0.1, 0.1, 1)
+        init_y = np.random.uniform(0.4, 0.5, 1)
+        init_z = self.button_height
+
+        Euler = [-1.578253446554462, 3.14159, euler_z[0]]
+        orn = p.getQuaternionFromEuler(Euler)
+        pos = [init_x[0], init_y[0], init_z]
+
+        # lower limits for null space
         # ll = [-3.0543, -4.6251, -2.8274, -4.6251, -3.0543, -3.0543]
-        # # upper limits for null space
-        # # ul = [3.0543, 1.4835, 2.8274, 1.4835, 3.0543, 3.0543]
+        ll = [-3.0543, -4.6251, -2.8274, -4.6251, -3.0543, -3.0543]
+        # upper limits for null space
         # ul = [3.0543, 1.4835, 2.8274, 1.4835, 3.0543, 3.0543]
-        # # joint ranges for null space
-        # jr = [6.28318530718, 6.28318530718, 5.6558, 6.28318530718, 6.28318530718, 6.28318530718]
-        # # restposes for null space
-        # # 1.19826176 -1.2064331   1.85829957 -0.72282605  1.44937236  0.
-        # rp = [1.19826176, -1.2064331, 1.85829957, -0.72282605, 1.44937236, 0.]
-        # # 循环以使结果逼近
-        # for i in range(3):
-        #     pos[1] = pos[1]
-        #     joint_angles = p.calculateInverseKinematics(self.fr5, 6, pos, orn,
-        #                                                 lowerLimits=ll,
-        #                                                 upperLimits=ul,
-        #                                                 jointRanges=jr,
-        #                                                 restPoses=rp)
-        #     joint_angles = list(joint_angles[:6]) + [0, 0]
-        #     p.setJointMotorControlArray(self.fr5, [1, 2, 3, 4, 5, 6, 8, 9], p.POSITION_CONTROL,
-        #                                 targetPositions=joint_angles)
-        #     for i in range(20):
-        #         self.p.stepSimulation()
-        #
-        # # 设置初始位置
-        # Gripper_posx = p.getLinkState(self.fr5, 6)[0][0]
-        # Gripper_posy = p.getLinkState(self.fr5, 6)[0][1]
-        # Gripper_posz = p.getLinkState(self.fr5, 6)[0][2]
-        # relative_position = np.array([0, 0, 0.22])
-        #
-        # # 固定夹爪相对于机械臂末端的相对位置转换
-        # rotation = R.from_quat(p.getLinkState(self.fr5, 7)[1])
-        # rotated_relative_position = rotation.apply(relative_position)
-        # self.gripper_centre_pos = [Gripper_posx, Gripper_posy, Gripper_posz] + rotated_relative_position
-        #
-        # self.goalx = self.gripper_centre_pos[0]
-        # self.goaly = self.gripper_centre_pos[1] - self.obstacle_wide
-        # self.goalz = self.key_height
-        # self.get_observation()
-        self.goalx = np.random.uniform(-0.4, 0.4, 1)[0]
-        self.goaly = np.random.uniform(0.7, 0.95, 1)[0]
-        self.goalz = np.random.uniform(self.key_height-0.05, self.key_height+0.05, 1)[0]
-        self.base_position = [self.goalx, self.goaly + self.obstacle_wide+self.cup_height/2, self.goalz]
+        ul = [3.0543, 1.4835, 2.8274, 1.4835, 3.0543, 3.0543]
+        # joint ranges for null space
+        jr = [6.28318530718, 6.28318530718, 5.6558, 6.28318530718, 6.28318530718, 6.28318530718]
+        # restposes for null space
+        # 1.19826176 -1.2064331   1.85829957 -0.72282605  1.44937236  0.
+        rp = [1.19826176, -1.2064331, 1.85829957, -0.72282605, 1.44937236, 0.]
+        # 循环以使结果逼近
+        for i in range(3):
+            pos[1] = pos[1]
+            joint_angles = p.calculateInverseKinematics(self.fr5, 6, pos, orn,
+                                                        lowerLimits=ll,
+                                                        upperLimits=ul,
+                                                        jointRanges=jr,
+                                                        restPoses=rp)
+            joint_angles = list(joint_angles[:6]) + [0, 0]
+            p.setJointMotorControlArray(self.fr5, [1, 2, 3, 4, 5, 6, 8, 9], p.POSITION_CONTROL,
+                                        targetPositions=joint_angles)
+            for i in range(20):
+                self.p.stepSimulation()
+
+        # 设置初始位置
+        Gripper_posx = p.getLinkState(self.fr5, 6)[0][0]
+        Gripper_posy = p.getLinkState(self.fr5, 6)[0][1]
+        Gripper_posz = p.getLinkState(self.fr5, 6)[0][2]
+        relative_position = np.array([0, 0, 0.183])
+
+        # 固定夹爪相对于机械臂末端的相对位置转换
+        rotation = R.from_quat(p.getLinkState(self.fr5, 7)[1])
+        rotated_relative_position = rotation.apply(relative_position)
+        self.gripper_centre_pos = [Gripper_posx, Gripper_posy, Gripper_posz] + rotated_relative_position
+
+        self.goalx = self.gripper_centre_pos[0]
+        self.goaly = self.gripper_centre_pos[1] + self.obstacle_wide + self.button_length/2 + 0.01
+        self.goalz = self.cup_height/2 + self.targettable_height
+        self.base_position = [self.goalx, self.goaly, self.button_height]
         self.p.resetBasePositionAndOrientation(self.obstacle, self.base_position, [0, 0, 0, 1])
         Euler = [math.pi/2, 0, 0]
         key_orn = p.getQuaternionFromEuler(Euler)
 
         # self.target_position = [0.5, 0.5, 1]
-        self.target_position = [self.goalx, self.goaly+self.cup_height/2, self.goalz]
-        self.p.resetBasePositionAndOrientation(self.target, self.target_position, key_orn)
+        self.button_position = [self.goalx, self.goaly-self.obstacle_wide, self.button_height]
+        self.p.resetBasePositionAndOrientation(self.button, self.button_position, key_orn)
+
+        self.targettable_position = [self.goalx, self.goaly, self.targettable_height/2]
+        self.p.resetBasePositionAndOrientation(self.targettable, self.targettable_position, [0, 0, 0, 1])
+
+        self.target_position = [self.goalx, self.goaly, self.goalz]
+        self.p.resetBasePositionAndOrientation(self.target, self.target_position, [0, 0, 0, 1])
 
         self.ori_target_position = np.array(p.getBasePositionAndOrientation(self.target)[0])
-        # 合上夹爪
-        p.setJointMotorControlArray(self.fr5, [8, 9], p.POSITION_CONTROL,
-                                    targetPositions=self.grasp_effort)
+        # # 合上夹爪
+        # p.setJointMotorControlArray(self.fr5, [8, 9], p.POSITION_CONTROL,
+        #                             targetPositions=self.grasp_effort)
         for i in range(100):
             self.p.stepSimulation()
             # time.sleep(1. / 240.)
@@ -331,11 +348,14 @@ class FR5_Env(gym.Env):
 
         obs_gripper_orientation = (np.array([gripper_orientation[0], gripper_orientation[1], gripper_orientation[2]],
                                             dtype=np.float32) + 180) / 360
+        # true_target_position = np.array(p.getBasePositionAndOrientation(self.target)[0])
+        # obs_target_position = np.array([true_target_position[0] + 0.4 / 0.8,
+        #                                 (true_target_position[1] - 0.7) / 0.25,
+        #                                 true_target_position[2] / 0.1], dtype=np.float32)
 
         obs_target_position = np.array([self.goalx + 0.4 / 0.8,
                                         (self.goaly - 0.7) / 0.25,
-                                        (self.goalz - self.key_height + 0.05) / 0.1], dtype=np.float32)
-
+                                        (self.goalz + 0.05) / 0.1], dtype=np.float32)
         # self.target_position = np.array(p.getBasePositionAndOrientation(self.target)[0])
         #
         # obs_target_position = np.array([(self.target_position[0] + 0.2) / 0.4,

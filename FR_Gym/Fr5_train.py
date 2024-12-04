@@ -87,7 +87,7 @@ if __name__ == '__main__':
     #         seed = None,
     #         device = "cuda",
     #         _init_setup_model = True)
-    model = PPO.load(r"/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1127-152446/best_model.zip", env=env, print_system_info=True)
+    # model = PPO.load(r"/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1202-160553/best_model.zip", env=env, print_system_info=True)
 
     model.set_logger(new_logger)
     tensorboard_callback = TensorboardCallback()

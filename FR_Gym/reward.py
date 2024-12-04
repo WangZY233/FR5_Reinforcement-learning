@@ -57,8 +57,8 @@ def cal_success_reward(self, distance):
 
     success_reward = 0
     # 夹爪中心和目标之间距离小于一定值，则任务成功
-    if self.success == True and self.step_num <= 100 and gripper_contact:
-        success_reward = 1000
+    if self.success == True and self.step_num <= 100:
+        success_reward = 100
         self.terminated = True
         self.success = True
         logger.info("成功抓取！！！！！！！！！！执行步数：%s  距离目标:%s" % (self.step_num, distance))
@@ -73,13 +73,13 @@ def cal_success_reward(self, distance):
         # self.truncated = True
     elif obstacle_contact:
         success_reward = - 10
-        self.terminated = True
+        # self.terminated = True
         logger.info("碰撞障碍物！ 执行步数：%s    距离目标:%s" % (self.step_num, distance))
         # self.truncated = True
-    elif other_contact:
+    elif other_contact or gripper_contact:
         success_reward = - 10
-        self.terminated = True
-        logger.info("失败！碰撞其他物体！ 执行步数：%s    距离目标:%s" % (self.step_num, distance))
+        # self.terminated = True
+        logger.info("碰撞目标！ 执行步数：%s    距离目标:%s" % (self.step_num, distance))
         # self.truncated = True
 
 
@@ -97,10 +97,10 @@ def cal_dis_reward(self, distance):
     if self.step_num == 0:
         distance_reward = 0
     else:
-        # if distance <= 0.41:
-        distance_reward = 1000 * (self.distance_last - distance)
-        # elif distance > 0.41:
-        #     distance_reward = -2 * pow(math.e, 4.3*distance)
+        if distance <= 0.1:
+            distance_reward = 5000 * (self.distance_last - distance)
+        else:
+            distance_reward = 1000 * (self.distance_last - distance)
     # logger.debug("相对距离：%f"%(self.distance_last-distance))
     # logger.debug("距离奖励:%f"%distance_reward)
     # 保存上一次的距离
@@ -167,7 +167,7 @@ def get_distance(self):
     Gripper_posx = p.getLinkState(self.fr5, 6)[0][0]
     Gripper_posy = p.getLinkState(self.fr5, 6)[0][1]
     Gripper_posz = p.getLinkState(self.fr5, 6)[0][2]
-    relative_position = np.array([0, 0, 0.183])
+    relative_position = np.array([0, 0, 0.15])
     # 固定夹爪相对于机械臂末端的相对位置转换
     rotation = R.from_quat(p.getLinkState(self.fr5, 7)[1])
     rotated_relative_position = rotation.apply(relative_position)

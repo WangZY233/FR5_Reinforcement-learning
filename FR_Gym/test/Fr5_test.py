@@ -21,7 +21,7 @@ if __name__ == '__main__':
     args, kwargs = get_args()
     env = FR5_Env(gui=True)
     env.render()
-    model = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1125-212408/best_model.zip")
+    model = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1203-135536/best_model.zip")
     # model = TD3.load("F:\\Pycharm_project\\RL\\models\\TD3\\TD3-run-eposide270.zip")
     # model = DDPG.load("F:\\Pycharm_project\\RL\\models\\DDPG\\DDPG-run-eposide282.zip")
     test_num = args.test_num  # 测试次数
@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
             score += reward
             # env.render()
-            time.sleep(0.01)
+            time.sleep(0.1)
 
         if info['is_success']:
             success_num += 1
