@@ -58,7 +58,7 @@ def cal_success_reward(self, distance):
     success_reward = 0
     # 夹爪中心和目标之间距离小于一定值，则任务成功
     if self.success == True and self.step_num <= 100:
-        success_reward = 100
+        success_reward = 1
         self.terminated = True
         self.success = True
         logger.info("成功抓取！！！！！！！！！！执行步数：%s  距离目标:%s" % (self.step_num, distance))
@@ -149,6 +149,34 @@ def grasp_reward(self):
 
     return total_reward, info
 
+def grasp_reward_2(self):
+    '''获取奖励'''
+    info = {}
+    total_reward = 0
+
+    distance = get_distance_2(self)
+    pose_reward = cal_pose_reward(self)
+    real_distance = get_real_distance(self)
+    judge_success(self, distance, pose_reward, success_dis=0.01, success_pose = -100)
+
+    # 计算奖励
+    success_reward = cal_success_reward(self, distance)
+    distance_reward = cal_dis_reward(self, distance)
+
+
+    total_reward = success_reward + pose_reward + distance_reward
+
+    self.truncated = False
+    self.reward = total_reward
+    info['reward'] = self.reward
+    info['is_success'] = self.success
+    info['step_num'] = self.step_num
+
+    info['success_reward'] = (1 if self.success else 0)
+    info['distance_reward'] = distance_reward
+    info['pose_reward'] = pose_reward
+
+    return total_reward, info
 
 def judge_success(self, distance, pose, success_dis, success_pose):
     '''判断成功或失败'''
@@ -163,6 +191,22 @@ def judge_success(self, distance, pose, success_dis, success_pose):
 
 
 def get_distance(self):
+    '''判断机械臂与夹爪的距离'''
+    Gripper_posx = p.getLinkState(self.fr5, 6)[0][0]
+    Gripper_posy = p.getLinkState(self.fr5, 6)[0][1]
+    Gripper_posz = p.getLinkState(self.fr5, 6)[0][2]
+    relative_position = np.array([0, 0, 0.183])
+    # 固定夹爪相对于机械臂末端的相对位置转换
+    rotation = R.from_quat(p.getLinkState(self.fr5, 7)[1])
+    rotated_relative_position = rotation.apply(relative_position)
+    gripper_centre_pos = [Gripper_posx, Gripper_posy, Gripper_posz] + rotated_relative_position
+    self.target_position = np.array(p.getBasePositionAndOrientation(self.target)[0])
+    distance = math.sqrt((gripper_centre_pos[0] - self.goalx) ** 2 +
+                         ((gripper_centre_pos[1] - (self.goaly-self.obstacle_wide-self.button_length/2)) ** 2) +
+                         (gripper_centre_pos[2] - self.button_height) ** 2)
+    # logger.debug("distance:%s"%str(distance))
+    return distance
+def get_distance_2(self):
     '''判断机械臂与夹爪的距离'''
     Gripper_posx = p.getLinkState(self.fr5, 6)[0][0]
     Gripper_posy = p.getLinkState(self.fr5, 6)[0][1]
