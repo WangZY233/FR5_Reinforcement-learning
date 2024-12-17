@@ -32,7 +32,8 @@ if __name__ == '__main__':
     success_num = 0  # 成功次数
     print("测试次数：", test_num)
     for i in range(test_num):
-        state, _ = env.reset_4()
+        env.stage = 1
+        state, _ = env.reset()
         time.sleep(1)
         done = False
         score = 0
@@ -47,13 +48,14 @@ if __name__ == '__main__':
             # print("action:",action)
             # if step % 40 == 0:
             #     env.moveTarget()
-            state, reward, done, _, info = env.step_4(action=action)
+            state, reward, done, _, info = env.step(action=action)
 
             score += reward
             # env.render()
             # print("state:", state)
 
             time.sleep(0.02)
+        env.stage = 2
         env.reset()
         done = False
         score = 0
@@ -76,7 +78,8 @@ if __name__ == '__main__':
 
             time.sleep(0.02)
         '''重置环境参数'''
-        env.reset_2()
+        env.stage = 3
+        env.reset()
         done = False
         score = 0
         # time.sleep(3)
@@ -90,14 +93,15 @@ if __name__ == '__main__':
             # print("action:",action)
             # if step % 40 == 0:
             #     env.moveTarget()
-            state, reward, done, _, info = env.step_2(action=action)
+            state, reward, done, _, info = env.step(action=action)
 
             score += reward
             # env.render()
             # print("state:", state)
 
             time.sleep(0.02)
-        env.reset_3()
+        env.stage = 4
+        env.reset()
         done = False
         score = 0
         # time.sleep(3)
@@ -111,7 +115,7 @@ if __name__ == '__main__':
             # print("action:",action)
             # if step % 40 == 0:
             #     env.moveTarget()
-            state, reward, done, _, info = env.step_3(action=action)
+            state, reward, done, _, info = env.step(action=action)
 
             score += reward
             # env.render()

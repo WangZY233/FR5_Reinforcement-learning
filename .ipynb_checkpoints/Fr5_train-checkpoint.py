@@ -29,12 +29,12 @@ def evaluate_model(model, env, n_eval_episodes=10):
 
     for episode in range(n_eval_episodes):
         episode_reward = 0
-        obs,_ = env.reset()
+        obs,_ = env.reset_2()
         done = False
 
         while not done:
             action, _ = model.predict(observation=obs, deterministic=True)
-            obs, reward, done, _,info = env.step(action)
+            obs, reward, done, _,info = env.step_2(action)
             episode_reward += reward
 
             if done and info.get('is_success', True):
