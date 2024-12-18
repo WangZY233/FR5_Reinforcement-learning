@@ -16,5 +16,4 @@ bin-release/
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
 # should NOT be excluded as they contain compiler settings and other important
 # information for Eclipse / Flash Builder.
-/FR_Gym/FR5_Reinforcement-learning/models/PPO/1117-204243/best_model.zip
-/stable_baselines3/
+/FR_Gym/FR5_Reinforcement-learning/
