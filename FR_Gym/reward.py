@@ -19,16 +19,17 @@ def cal_success_reward(self, distance):
         success_reward = 1
         self.terminated = True
         self.success = True
+        logger.info("成功抓取！！！！！！！！！！当前阶段:%s  执行步数：%s  距离目标:%s" % (self.stage, self.step_num, distance))
         if self.stage != 4:
             self.stage += 1
-        logger.info("成功抓取！！！！！！！！！！当前阶段:%s  执行步数：%s  距离目标:%s" % (self.stage, self.step_num, distance))
         # self.truncated = True
 
     # 机械臂执行步数过多
     if self.step_num > 100:
         success_reward = - 1
         self.terminated = True
-        logger.info("失败！执行步数过多！ 执行步数：%s    距离目标:%s" % (self.step_num, distance))
+        logger.info("失败！执行步数过多！当前阶段：%s 执行步数：%s    距离目标:%s" % (self.stage, self.step_num, distance))
+        self.stage = 1
 
     return success_reward
 
@@ -51,7 +52,6 @@ def grasp_reward(self):
     total_reward = 0
 
     distance = get_distance(self)
-    print("distance:", distance)
     pose_reward = cal_pose_reward(self)
     real_distance = get_real_distance(self)
     judge_success(self, distance, pose_reward, success_dis=0.015, success_pose = -100)

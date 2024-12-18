@@ -33,6 +33,15 @@ class FR5_Env(gym.Env):
         self.step_num = 0
         self.Con_cube = None
         self.stage = 1
+        self.model_1 = PPO.load(
+            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_2/FR_Gym/FR5_Reinforcement-learning/models/PPO/1117-204243/best_model.zip")
+        self.model_2 = PPO.load(
+            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_3/FR_Gym/FR5_Reinforcement-learning/models/PPO/1206-154614/best_model.zip")
+        self.model_3 = PPO.load(
+            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/FR_Gym/FR5_Reinforcement-learning/models/PPO/1203-135536/best_model.zip")
+        self.model_4 = PPO.load(
+            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1210-114110/best_model.zip")
+        self.guide_rate = 0.5
         # self.last_success = False
 
         # 设置最小的关节变化量
@@ -144,6 +153,10 @@ class FR5_Env(gym.Env):
         '''step'''
         info = {}
         # Execute one time step within the environment
+        # 以一定概率执行指导模型
+        if np.random.uniform(0, 1) < self.guide_rate:
+            action, _ = self.model_1.predict(observation=self.observation, deterministic=True)
+
         # 初始化关节角度列表
         joint_angles = []
 
@@ -182,6 +195,9 @@ class FR5_Env(gym.Env):
         '''step'''
         info = {}
         # Execute one time step within the environment
+        # 以一定概率执行指导模型
+        if np.random.uniform(0, 1) < self.guide_rate:
+            action, _ = self.model_2.predict(observation=self.observation, deterministic=True)
         # 初始化关节角度列表
         joint_angles = []
         # 初始化夹爪位置
@@ -223,6 +239,9 @@ class FR5_Env(gym.Env):
         '''step'''
         info = {}
         # Execute one time step within the environment
+        # 以一定概率执行指导模型
+        if np.random.uniform(0, 1) < self.guide_rate:
+            action, _ = self.model_3.predict(observation=self.observation, deterministic=True)
         # 初始化关节角度列表
         joint_angles = []
         # 初始化夹爪位置
@@ -264,6 +283,9 @@ class FR5_Env(gym.Env):
         '''step'''
         info = {}
         # Execute one time step within the environment
+        # 以一定概率执行指导模型
+        if np.random.uniform(0, 1) < self.guide_rate:
+            action, _ = self.model_4.predict(observation=self.observation, deterministic=True)
         # 初始化关节角度列表
         joint_angles = []
 
@@ -321,18 +343,28 @@ class FR5_Env(gym.Env):
             flags=p.URDF_USE_SELF_COLLISION
         )
 
-    def reset(self):
+    def reset(self, seed=None, options=None):
         if self.stage == 1:
-            return self.reset_1()
+            return self.reset_1(seed, options)
         elif self.stage == 2:
-            return self.reset_2()
+            return self.reset_2(seed, options)
         elif self.stage == 3:
-            return self.reset_3()
+            return self.reset_3(seed, options)
         elif self.stage == 4:
-            return self.reset_4()
+            return self.reset_4(seed, options)
 
     def reset_1(self, seed=None, options=None):
-        '''重置环境参数'''
+        """重置环境参数"""
+        '''干涉检测'''
+        error_contact_points = p.getContactPoints(bodyA=self.fr5, bodyB=self.fr5)
+        for contact_point in error_contact_points:
+            link_index = contact_point[3]
+            if link_index == 7 or link_index == 8:
+                logger.info("夹爪干涉出现！")
+                self.flashUR5()
+                for i in range(10):
+                    self.p.stepSimulation()
+                break
         self.step_num = 0
         self.reward = 0
         self.terminated = False
@@ -389,8 +421,6 @@ class FR5_Env(gym.Env):
                 self.p.stepSimulation()
             #
             Gripper_pos = p.getLinkState(self.fr5, 6)[4]
-        for i in range(7):
-            print(p.getJointState(self.fr5, i)[0] * 180 / np.pi)
 
         # 重新设置目标咖啡机位置
         self.goalx = np.random.uniform(-0.2, 0.2, 1)[0]
@@ -429,8 +459,6 @@ class FR5_Env(gym.Env):
             self.p.stepSimulation()
             # time.sleep(1. / 240.)
         self.get_observation_1()
-        #输出target此时坐标
-        print("target_position", self.ori_target_position)
         infos = {}
         infos['is_success'] = False
         infos['reward'] = 0

@@ -21,10 +21,10 @@ if __name__ == '__main__':
     args, kwargs = get_args()
     env = FR5_Env(gui=True)
     env.render()
-    model = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_3/FR_Gym/FR5_Reinforcement-learning/models/PPO/1206-154614/best_model.zip")
-    model_2 = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_4/FR_Gym/FR5_Reinforcement-learning/models/PPO/1203-135536/best_model.zip")
-    model_3 = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1210-114110/best_model.zip")
-    model_4 = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_2/FR_Gym/FR5_Reinforcement-learning/models/PPO/1117-204243/best_model.zip")
+    model_1 = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_2/FR_Gym/FR5_Reinforcement-learning/models/PPO/1117-204243/best_model.zip")
+    model_2 = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_3/FR_Gym/FR5_Reinforcement-learning/models/PPO/1206-154614/best_model.zip")
+    model_3 = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/FR_Gym/FR5_Reinforcement-learning/models/PPO/1203-135536/best_model.zip")
+    model_4 = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1210-114110/best_model.zip")
 
     # model = TD3.load("F:\\Pycharm_project\\RL\\models\\TD3\\TD3-run-eposide270.zip")
     # model = DDPG.load("F:\\Pycharm_project\\RL\\models\\DDPG\\DDPG-run-eposide282.zip")
@@ -43,7 +43,7 @@ if __name__ == '__main__':
             step += 1
             # action = env.action_space.sample()     # 随机采样动作
             # print("state:", state)
-            action, _ = model_4.predict(observation=state,deterministic=True)
+            action, _ = model_1.predict(observation=state, deterministic=True)
 
             # print("action:",action)
             # if step % 40 == 0:
@@ -65,7 +65,7 @@ if __name__ == '__main__':
             step += 1
             # action = env.action_space.sample()     # 随机采样动作
             # print("state:", state)
-            action, _ = model.predict(observation=state,deterministic=True)
+            action, _ = model_2.predict(observation=state, deterministic=True)
 
             # print("action:",action)
             # if step % 40 == 0:
@@ -88,7 +88,7 @@ if __name__ == '__main__':
             step += 1
             # action = env.action_space.sample()     # 随机采样动作
             # print("state:", state)
-            action, _ = model_2.predict(observation=state,deterministic=True)
+            action, _ = model_3.predict(observation=state, deterministic=True)
 
             # print("action:",action)
             # if step % 40 == 0:
@@ -110,7 +110,7 @@ if __name__ == '__main__':
             step += 1
             # action = env.action_space.sample()     # 随机采样动作
             print("state:", state)
-            action, _ = model_3.predict(observation=state,deterministic=True)
+            action, _ = model_4.predict(observation=state, deterministic=True)
 
             # print("action:",action)
             # if step % 40 == 0:
