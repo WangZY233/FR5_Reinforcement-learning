@@ -33,10 +33,10 @@ checkpoints = args.checkpoints
 test = args.test
 
 
-def make_env(i):
+def make_env(i, env_test=False):
     def _init():
         if i == 0:
-            env = FR5_Env(gui=True)
+            env = FR5_Env(gui=False)
         else:
             env = FR5_Env(gui=False)
         env = Monitor(env, logs_dir)
@@ -57,8 +57,9 @@ if __name__ == '__main__':
         os.makedirs(checkpoints)
 
     # Instantiate the env
-    num_train = 1
+    num_train = 8
     env = SubprocVecEnv([make_env(i) for i in range(num_train)])
+    # env_test = SubprocVecEnv([make_env(i, env_test=True) for i in range(num_train)])
     # env = DummyVecEnv([make_env() for i in range(num_train)])
 
     new_logger = configure(logs_dir, ["stdout", "csv", "tensorboard"])
@@ -90,7 +91,7 @@ if __name__ == '__main__':
     #         seed = None,
     #         device = "cuda",
     #         _init_setup_model = True)
-    # model = PPO.load(r"/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1202-160553/best_model.zip", env=env, print_system_info=True)
+    # model = PPO.load(r"/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/FR_Gym/FR5_Reinforcement-learning/models/PPO/1219-013116/best_model.zip")
 
     model.set_logger(new_logger)
     tensorboard_callback = TensorboardCallback()
@@ -98,7 +99,7 @@ if __name__ == '__main__':
     # 创建测试环境回调函数
     eval_callback = EvalCallback(env, best_model_save_path=models_dir,
                                  log_path=logs_dir, eval_freq=3000,
-                                 deterministic=True, render=True, n_eval_episodes=100)
+                                 deterministic=True, render=False, n_eval_episodes=10)
 
     TIMESTEPS = args.timesteps
     for eposide in range(1000):

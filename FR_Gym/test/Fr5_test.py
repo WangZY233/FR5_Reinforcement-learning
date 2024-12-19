@@ -25,14 +25,13 @@ if __name__ == '__main__':
     model_2 = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_3/FR_Gym/FR5_Reinforcement-learning/models/PPO/1206-154614/best_model.zip")
     model_3 = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/FR_Gym/FR5_Reinforcement-learning/models/PPO/1203-135536/best_model.zip")
     model_4 = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1210-114110/best_model.zip")
-
+    model_longSequence = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/FR_Gym/FR5_Reinforcement-learning/models/PPO/1219-013116/PPO-run-eposide540.zip")
     # model = TD3.load("F:\\Pycharm_project\\RL\\models\\TD3\\TD3-run-eposide270.zip")
     # model = DDPG.load("F:\\Pycharm_project\\RL\\models\\DDPG\\DDPG-run-eposide282.zip")
     test_num = args.test_num  # 测试次数
     success_num = 0  # 成功次数
     print("测试次数：", test_num)
     for i in range(test_num):
-        env.stage = 1
         state, _ = env.reset()
         time.sleep(1)
         done = False
@@ -43,7 +42,7 @@ if __name__ == '__main__':
             step += 1
             # action = env.action_space.sample()     # 随机采样动作
             # print("state:", state)
-            action, _ = model_1.predict(observation=state, deterministic=True)
+            action, _ = model_longSequence.predict(observation=state, deterministic=True)
 
             # print("action:",action)
             # if step % 40 == 0:
@@ -55,73 +54,96 @@ if __name__ == '__main__':
             # print("state:", state)
 
             time.sleep(0.02)
-        env.stage = 2
-        env.reset()
-        done = False
-        score = 0
-        # time.sleep(3)
-        step = 0
-        while not done:
-            step += 1
-            # action = env.action_space.sample()     # 随机采样动作
-            # print("state:", state)
-            action, _ = model_2.predict(observation=state, deterministic=True)
-
-            # print("action:",action)
-            # if step % 40 == 0:
-            #     env.moveTarget()
-            state, reward, done, _, info = env.step(action=action)
-
-            score += reward
-            # env.render()
-            # print("state:", state)
-
-            time.sleep(0.02)
-        '''重置环境参数'''
-        env.stage = 3
-        env.reset()
-        done = False
-        score = 0
-        # time.sleep(3)
-        step = 0
-        while not done:
-            step += 1
-            # action = env.action_space.sample()     # 随机采样动作
-            # print("state:", state)
-            action, _ = model_3.predict(observation=state, deterministic=True)
-
-            # print("action:",action)
-            # if step % 40 == 0:
-            #     env.moveTarget()
-            state, reward, done, _, info = env.step(action=action)
-
-            score += reward
-            # env.render()
-            # print("state:", state)
-
-            time.sleep(0.02)
-        env.stage = 4
-        env.reset()
-        done = False
-        score = 0
-        # time.sleep(3)
-        step = 0
-        while not done:
-            step += 1
-            # action = env.action_space.sample()     # 随机采样动作
-            print("state:", state)
-            action, _ = model_4.predict(observation=state, deterministic=True)
-
-            # print("action:",action)
-            # if step % 40 == 0:
-            #     env.moveTarget()
-            state, reward, done, _, info = env.step(action=action)
-
-            score += reward
-            # env.render()
-            # print("state:", state)
-
-            time.sleep(0.02)
+        # env.stage = 1
+        # state, _ = env.reset()
+        # time.sleep(1)
+        # done = False
+        # score = 0
+        # # time.sleep(3)
+        # step = 0
+        # while not done:
+        #     step += 1
+        #     # action = env.action_space.sample()     # 随机采样动作
+        #     # print("state:", state)
+        #     action, _ = model_1.predict(observation=state, deterministic=True)
+        #
+        #     # print("action:",action)
+        #     # if step % 40 == 0:
+        #     #     env.moveTarget()
+        #     state, reward, done, _, info = env.step(action=action)
+        #
+        #     score += reward
+        #     # env.render()
+        #     # print("state:", state)
+        #
+        #     time.sleep(0.02)
+        # env.stage = 2
+        # env.reset()
+        # done = False
+        # score = 0
+        # # time.sleep(3)
+        # step = 0
+        # while not done:
+        #     step += 1
+        #     # action = env.action_space.sample()     # 随机采样动作
+        #     # print("state:", state)
+        #     action, _ = model_2.predict(observation=state, deterministic=True)
+        #
+        #     # print("action:",action)
+        #     # if step % 40 == 0:
+        #     #     env.moveTarget()
+        #     state, reward, done, _, info = env.step(action=action)
+        #
+        #     score += reward
+        #     # env.render()
+        #     # print("state:", state)
+        #
+        #     time.sleep(0.02)
+        # '''重置环境参数'''
+        # env.stage = 3
+        # env.reset()
+        # done = False
+        # score = 0
+        # # time.sleep(3)
+        # step = 0
+        # while not done:
+        #     step += 1
+        #     # action = env.action_space.sample()     # 随机采样动作
+        #     # print("state:", state)
+        #     action, _ = model_3.predict(observation=state, deterministic=True)
+        #
+        #     # print("action:",action)
+        #     # if step % 40 == 0:
+        #     #     env.moveTarget()
+        #     state, reward, done, _, info = env.step(action=action)
+        #
+        #     score += reward
+        #     # env.render()
+        #     # print("state:", state)
+        #
+        #     time.sleep(0.02)
+        # env.stage = 4
+        # env.reset()
+        # done = False
+        # score = 0
+        # # time.sleep(3)
+        # step = 0
+        # while not done:
+        #     step += 1
+        #     # action = env.action_space.sample()     # 随机采样动作
+        #     # print("state:", state)
+        #     action, _ = model_4.predict(observation=state, deterministic=True)
+        #
+        #     # print("action:",action)
+        #     # if step % 40 == 0:
+        #     #     env.moveTarget()
+        #     state, reward, done, _, info = env.step(action=action)
+        #
+        #     score += reward
+        #     # env.render()
+        #     # print("state:", state)
+        #
+        #     time.sleep(0.02)
         time.sleep(1)
 
         if info['is_success']:

@@ -22,6 +22,8 @@ def cal_success_reward(self, distance):
         logger.info("成功抓取！！！！！！！！！！当前阶段:%s  执行步数：%s  距离目标:%s" % (self.stage, self.step_num, distance))
         if self.stage != 4:
             self.stage += 1
+        else:
+            self.stage = 1
         # self.truncated = True
 
     # 机械臂执行步数过多
@@ -42,25 +44,28 @@ def cal_pose_reward(self):
     gripper_orientation = gripper_orientation.as_euler('xyz', degrees=True)
     # 计算夹爪的姿态奖励
     pose_reward = -(
-                pow(gripper_orientation[0] + 90, 2) + pow(gripper_orientation[1], 2) + pow(gripper_orientation[2], 2))
+            pow(gripper_orientation[0] + 90, 2) + pow(gripper_orientation[1], 2) + pow(gripper_orientation[2], 2))
     # logger.debug("姿态奖励：%f"%pose_reward)
     return pose_reward * 0.01
 
-def grasp_reward(self):
+
+def grasp_reward(self, diff=0):
     '''获取奖励'''
     info = {}
+    # stage需要在结算之前记录
+    info['stage'] = self.stage
     total_reward = 0
 
     distance = get_distance(self)
     pose_reward = cal_pose_reward(self)
     real_distance = get_real_distance(self)
-    judge_success(self, distance, pose_reward, success_dis=0.015, success_pose = -100)
+    judge_success(self, distance, pose_reward, success_dis=0.015, success_pose=-100)
 
     # 计算奖励
     success_reward = cal_success_reward(self, distance)
-
-
-    total_reward = success_reward
+    # 现有模型与目标模型的差异惩罚
+    diff_reward = -diff/10
+    total_reward = success_reward + diff_reward
 
     self.truncated = False
     self.reward = total_reward
@@ -69,10 +74,11 @@ def grasp_reward(self):
     info['step_num'] = self.step_num
 
     info['success_reward'] = (1 if self.success else 0)
-    info['distance_reward'] = total_reward
+    info['distance_reward'] = diff_reward
     info['pose_reward'] = pose_reward
 
     return total_reward, info
+
 
 def judge_success(self, distance, pose, success_dis, success_pose):
     '''判断成功或失败'''
@@ -105,6 +111,21 @@ def get_distance(self):
                          (gripper_centre_pos[2] - self.goalz) ** 2)
     # logger.debug("distance:%s"%str(distance))
     return distance
+
+
+def her_reward(self):
+    #获取夹爪当前位置：
+    Gripper_pos = p.getLinkState(self.fr5, 6)[0]
+
+    if self.stage == 2:
+        relative_position = np.array([0, 0, 0.183])
+    else:
+        relative_position = np.array([0, 0, 0.15])
+    # 固定夹爪相对于机械臂末端的相对位置转换
+    rotation = R.from_quat(p.getLinkState(self.fr5, 7)[1])
+    rotated_relative_position = rotation.apply(relative_position)
+    gripper_centre_pos = Gripper_pos + rotated_relative_position
+    #
 
 
 def get_real_distance(self):

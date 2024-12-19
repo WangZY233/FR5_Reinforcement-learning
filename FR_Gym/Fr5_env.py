@@ -30,9 +30,12 @@ class FR5_Env(gym.Env):
 
     def __init__(self, gui=False):
         super(FR5_Env).__init__()
+        self.use_stage_skip = True #是否启用阶段跳过以实现数据采集
+        self.stage_skip_rate = 0.4
         self.step_num = 0
         self.Con_cube = None
         self.stage = 1
+        self.guide_rate = 0
         self.model_1 = PPO.load(
             "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_2/FR_Gym/FR5_Reinforcement-learning/models/PPO/1117-204243/best_model.zip")
         self.model_2 = PPO.load(
@@ -41,9 +44,8 @@ class FR5_Env(gym.Env):
             "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/FR_Gym/FR5_Reinforcement-learning/models/PPO/1203-135536/best_model.zip")
         self.model_4 = PPO.load(
             "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1210-114110/best_model.zip")
-        self.guide_rate = 0.5
         # self.last_success = False
-
+        print('模型载入完毕')
         # 设置最小的关节变化量
         low_action = np.array([-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0])
         high_action = np.array([1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0])
@@ -139,7 +141,7 @@ class FR5_Env(gym.Env):
                                                     baseCollisionShapeIndex=targettable_2Id,
                                                     basePosition=[0.5, 0.5, 2])
 
-    def step(self,action):
+    def step(self, action):
         if self.stage == 1:
             return self.step_1(action)
         elif self.stage == 2:
@@ -153,9 +155,10 @@ class FR5_Env(gym.Env):
         '''step'''
         info = {}
         # Execute one time step within the environment
-        # 以一定概率执行指导模型
-        if np.random.uniform(0, 1) < self.guide_rate:
-            action, _ = self.model_1.predict(observation=self.observation, deterministic=True)
+        guide_action, _ = self.model_1.predict(observation=self.observation, deterministic=True)
+
+        # 比较两个动作的差异
+        diff = np.sum(abs(guide_action[:6] - action[:6]))
 
         # 初始化关节角度列表
         joint_angles = []
@@ -183,7 +186,7 @@ class FR5_Env(gym.Env):
             self.p.stepSimulation()
             # time.sleep(1./240.)
 
-        self.reward, info = grasp_reward(self)
+        self.reward, info = grasp_reward(self, diff)
 
         # observation计算
         self.get_observation_1()
@@ -191,13 +194,16 @@ class FR5_Env(gym.Env):
         self.step_num += 1
 
         return self.observation, self.reward, self.terminated, self.truncated, info
+
     def step_2(self, action):
         '''step'''
         info = {}
         # Execute one time step within the environment
-        # 以一定概率执行指导模型
-        if np.random.uniform(0, 1) < self.guide_rate:
-            action, _ = self.model_2.predict(observation=self.observation, deterministic=True)
+        guide_action, _ = self.model_2.predict(observation=self.observation, deterministic=True)
+
+        # 比较两个动作的差异
+        diff = np.sum(abs(guide_action[:6] - action[:6]))
+
         # 初始化关节角度列表
         joint_angles = []
         # 初始化夹爪位置
@@ -226,7 +232,7 @@ class FR5_Env(gym.Env):
             self.p.stepSimulation()
             # time.sleep(1./240.)
 
-        self.reward, info = grasp_reward(self)
+        self.reward, info = grasp_reward(self, diff)
 
         # observation计算
         self.get_observation_2()
@@ -239,9 +245,11 @@ class FR5_Env(gym.Env):
         '''step'''
         info = {}
         # Execute one time step within the environment
-        # 以一定概率执行指导模型
-        if np.random.uniform(0, 1) < self.guide_rate:
-            action, _ = self.model_3.predict(observation=self.observation, deterministic=True)
+        guide_action, _ = self.model_3.predict(observation=self.observation, deterministic=True)
+
+        # 比较两个动作的差异
+        diff = np.sum(abs(guide_action[:6] - action[:6]))
+
         # 初始化关节角度列表
         joint_angles = []
         # 初始化夹爪位置
@@ -270,7 +278,7 @@ class FR5_Env(gym.Env):
             self.p.stepSimulation()
             # time.sleep(1./240.)
 
-        self.reward, info = grasp_reward(self)
+        self.reward, info = grasp_reward(self, diff)
 
         # observation计算
         self.get_observation_3()
@@ -283,9 +291,11 @@ class FR5_Env(gym.Env):
         '''step'''
         info = {}
         # Execute one time step within the environment
-        # 以一定概率执行指导模型
-        if np.random.uniform(0, 1) < self.guide_rate:
-            action, _ = self.model_4.predict(observation=self.observation, deterministic=True)
+        guide_action, _ = self.model_4.predict(observation=self.observation, deterministic=True)
+
+        # 比较两个动作的差异
+        diff = np.sum(abs(guide_action[:6] - action[:6]))
+
         # 初始化关节角度列表
         joint_angles = []
 
@@ -312,7 +322,7 @@ class FR5_Env(gym.Env):
             self.p.stepSimulation()
             # time.sleep(1./240.)
 
-        self.reward, info = grasp_reward(self)
+        self.reward, info = grasp_reward(self, diff)
 
         # observation计算
         self.get_observation_4()
@@ -320,8 +330,6 @@ class FR5_Env(gym.Env):
         self.step_num += 1
 
         return self.observation, self.reward, self.terminated, self.truncated, info
-
-
 
     def moveTarget(self):
         # 移动目标位置
@@ -344,27 +352,30 @@ class FR5_Env(gym.Env):
         )
 
     def reset(self, seed=None, options=None):
-        if self.stage == 1:
-            return self.reset_1(seed, options)
-        elif self.stage == 2:
-            return self.reset_2(seed, options)
-        elif self.stage == 3:
-            return self.reset_3(seed, options)
-        elif self.stage == 4:
-            return self.reset_4(seed, options)
+        if self.use_stage_skip == True and np.random.uniform(0, 1) < self.stage_skip_rate:
+            return self.stage_skip()
+        else:
+            if self.stage == 1:
+                return self.reset_1(seed, options)
+            elif self.stage == 2:
+                return self.reset_2(seed, options)
+            elif self.stage == 3:
+                return self.reset_3(seed, options)
+            elif self.stage == 4:
+                return self.reset_4(seed, options)
 
     def reset_1(self, seed=None, options=None):
         """重置环境参数"""
-        '''干涉检测'''
-        error_contact_points = p.getContactPoints(bodyA=self.fr5, bodyB=self.fr5)
-        for contact_point in error_contact_points:
-            link_index = contact_point[3]
-            if link_index == 7 or link_index == 8:
-                logger.info("夹爪干涉出现！")
-                self.flashUR5()
-                for i in range(10):
-                    self.p.stepSimulation()
-                break
+        # '''干涉检测'''
+        # error_contact_points = p.getContactPoints(bodyA=self.fr5, bodyB=self.fr5)
+        # for contact_point in error_contact_points:
+        #     link_index = contact_point[3]
+        #     if link_index == 7 or link_index == 8:
+        #         logger.info("夹爪干涉出现！")
+        #         self.flashUR5()
+        #         for i in range(10):
+        #             self.p.stepSimulation()
+        #         break
         self.step_num = 0
         self.reward = 0
         self.terminated = False
@@ -425,8 +436,8 @@ class FR5_Env(gym.Env):
         # 重新设置目标咖啡机位置
         self.goalx = np.random.uniform(-0.2, 0.2, 1)[0]
         self.goaly = np.random.uniform(0.8, 0.9, 1)[0]
-        # self.goalx = 0.0119
-        # self.goaly = 0.82068
+        self.goalx = 0.0119
+        self.goaly = 0.85
         self.goalz = np.array([self.targettable_height + self.cup_height / 2])
         self.base_position = [self.goalx, self.goaly, self.button_height]
         self.p.resetBasePositionAndOrientation(self.obstacle, self.base_position, [0, 0, 0, 1])
@@ -444,7 +455,7 @@ class FR5_Env(gym.Env):
         # p.setJointMotorControlArray(self.fr5, [8, 9], p.POSITION_CONTROL,
         #                             targetPositions=self.grasp_effort)
         # 设置初始杯子位置
-        self.get_observation_2()
+        self.get_observation_1()
         self.base_position = [self.gripper_centre_pos[0], self.gripper_centre_pos[1], self.targettable_2_height / 2]
         self.p.resetBasePositionAndOrientation(self.targettable_2, self.base_position, [0, 0, 0, 1])
         self.target_position = [self.gripper_centre_pos[0], self.gripper_centre_pos[1],
@@ -541,6 +552,38 @@ class FR5_Env(gym.Env):
         # print("observation", self.observation)
         return self.observation, infos
 
+    def stage_skip(self):
+        '''阶段跳过'''
+        # 执行当前阶段对应指导动作，直到结束，然后进入下一个阶段
+        if self.stage == 1:
+            done = False
+            state, _ = self.reset_1()
+            while not done:
+                action, _ = self.model_1.predict(observation=state, deterministic=True)
+                state, reward, done, _, info = self.step_1(action=action)
+            return self.reset()        # 由于最后未必执行成功，所以需要根据stage进行重置
+        elif self.stage == 2:
+            done = False
+            state, _ = self.reset_2()
+            while not done:
+                action, _ = self.model_2.predict(observation=state, deterministic=True)
+                state, reward, done, _, info = self.step_2(action=action)
+            return self.reset()
+        elif self.stage == 3:
+            done = False
+            state, _ = self.reset_3()
+            while not done:
+                action, _ = self.model_3.predict(observation=state, deterministic=True)
+                state, reward, done, _, info = self.step_3(action=action)
+            return self.reset()
+        elif self.stage == 4:
+            done = False
+            state, _ = self.reset_4()
+            while not done:
+                action, _ = self.model_4.predict(observation=state, deterministic=True)
+                state, reward, done, _, info = self.step_4(action=action)
+            return self.reset()
+
     def get_gripper_position(self):
         '''获取夹爪中心位置和朝向'''
         Gripper_pos = p.getLinkState(self.fr5, 6)[4]
@@ -597,6 +640,7 @@ class FR5_Env(gym.Env):
 
         self.observation = self.observation.flatten()
         self.observation = self.observation.reshape(1, 14)
+
     def get_observation_2(self, add_noise=False):
         """计算observation"""
         Gripper_posx = p.getLinkState(self.fr5, 6)[0][0]
@@ -734,8 +778,6 @@ class FR5_Env(gym.Env):
 
         self.observation = self.observation.flatten()
         self.observation = self.observation.reshape(1, 14)
-
-
 
     def get_observation_(self, add_noise=False):
         """计算observation"""

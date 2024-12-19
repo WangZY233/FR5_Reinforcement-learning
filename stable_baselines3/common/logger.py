@@ -84,7 +84,8 @@ class HParam:
     def __init__(self, hparam_dict: Mapping[str, Union[bool, str, float, None]], metric_dict: Mapping[str, float]):
         self.hparam_dict = hparam_dict
         if not metric_dict:
-            raise Exception("`metric_dict` must not be empty to display hyperparameters to the HPARAMS tensorboard tab.")
+            raise Exception(
+                "`metric_dict` must not be empty to display hyperparameters to the HPARAMS tensorboard tab.")
         self.metric_dict = metric_dict
 
 
@@ -203,7 +204,7 @@ class HumanOutputFormat(KVWriter, SeqWriter):
                 key2str[(tag, self._truncate(tag))] = ""
             # Remove tag from key and indent the key
             if len(tag) > 0 and tag in key:
-                key = f"{'':3}{key[len(tag) :]}"
+                key = f"{'':3}{key[len(tag):]}"
 
             truncated_key = self._truncate(key)
             if (tag, truncated_key) in key2str:
@@ -260,7 +261,8 @@ class HumanOutputFormat(KVWriter, SeqWriter):
             self.file.close()
 
 
-def filter_excluded_keys(key_values: Dict[str, Any], key_excluded: Dict[str, Tuple[str, ...]], _format: str) -> Dict[str, Any]:
+def filter_excluded_keys(key_values: Dict[str, Any], key_excluded: Dict[str, Tuple[str, ...]], _format: str) -> Dict[
+    str, Any]:
     """
     Filters the keys specified by ``key_exclude`` for the specified format
 
@@ -426,7 +428,8 @@ class TensorBoardOutputFormat(KVWriter):
 
             if isinstance(value, HParam):
                 # we don't use `self.writer.add_hparams` to have control over the log_dir
-                experiment, session_start_info, session_end_info = hparams(value.hparam_dict, metric_dict=value.metric_dict)
+                experiment, session_start_info, session_end_info = hparams(value.hparam_dict,
+                                                                           metric_dict=value.metric_dict)
                 self.writer.file_writer.add_summary(experiment)
                 self.writer.file_writer.add_summary(session_start_info)
                 self.writer.file_writer.add_summary(session_end_info)
@@ -512,7 +515,8 @@ class Logger:
         self.name_to_value[key] = value
         self.name_to_excluded[key] = self.to_tuple(exclude)
 
-    def record_mean(self, key: str, value: Optional[float], exclude: Optional[Union[str, Tuple[str, ...]]] = None) -> None:
+    def record_mean(self, key: str, value: Optional[float],
+                    exclude: Optional[Union[str, Tuple[str, ...]]] = None) -> None:
         """
         The same as record(), but if called many times, values averaged.
 
