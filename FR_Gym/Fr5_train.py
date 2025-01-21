@@ -1,15 +1,15 @@
 '''
- @Author: Prince Wang 
- @Date: 2024-02-22 
- @Last Modified by:   Prince Wang 
- @Last Modified time: 2023-10-24 23:04:04 
+@Author: Prince Wang 
+@Date: 2024-02-22 
+@Last Modified by:   Prince Wang 
+@Last Modified time: 2023-10-24 23:04:04 
 '''
 
 import os
 import sys
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
-
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../")
 from stable_baselines3 import A2C, PPO, DDPG, TD3, SAC, DQN
 from stable_baselines3.common.vec_env import DummyVecEnv, SubprocVecEnv
 from Fr5_env import FR5_Env
@@ -66,40 +66,15 @@ if __name__ == '__main__':
 
     # HACK
     # Define and Train the agent
-    model = PPO("MlpPolicy", env, verbose=1, tensorboard_log=logs_dir, device="cuda")
-    # model = PPO(policy = "MlpPolicy",
-    #         env = env,
-    #         learning_rate = 0.0003,
-    #         n_steps = 2048,
-    #         batch_size = 256,
-    #         n_epochs = 10,
-    #         gamma = 0.99,
-    #         gae_lambda = 0.95,
-    #         clip_range=  0.2,
-    #         clip_range_vf = None,
-    #         normalize_advantage = True,
-    #         ent_coef = 0,
-    #         vf_coef = 0.5,
-    #         max_grad_norm = 0.5,
-    #         use_sde = True,
-    #         sde_sample_freq = -1,
-    #         target_kl = None,
-    #         stats_window_size = 100,
-    #         tensorboard_log = logs_dir,
-    #         policy_kwargs = dict(normalize_images=False),
-    #         verbose = 1,
-    #         seed = None,
-    #         device = "cuda",
-    #         _init_setup_model = True)
-    # model = PPO.load(r"/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/FR_Gym/FR5_Reinforcement-learning/models/PPO/1219-013116/best_model.zip")
-
+    model = PPO("LSTMPolicy", env, verbose=1, tensorboard_log=logs_dir, device="cuda")
+    # model = PPO.load("/home/wangzy/FR5_Reinforcement-learning-long_sequence/FR5_Reinforcement-learning/models/PPO/1226-113348/pick_model.zip",env)
     model.set_logger(new_logger)
     tensorboard_callback = TensorboardCallback()
 
     # 创建测试环境回调函数
     eval_callback = EvalCallback(env, best_model_save_path=models_dir,
-                                 log_path=logs_dir, eval_freq=3000,
-                                 deterministic=True, render=False, n_eval_episodes=10)
+                                log_path=logs_dir, eval_freq=3000,
+                                deterministic=True, render=False, n_eval_episodes=10)
 
     TIMESTEPS = args.timesteps
     for eposide in range(1000):

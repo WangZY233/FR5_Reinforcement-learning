@@ -110,7 +110,7 @@ if __name__ == '__main__':
     new_logger = configure(logs_dir, ["stdout", "csv", "tensorboard"])
     # Define and Train the agent
     # model = PPO("MlpPolicy", env, verbose=1, tensorboard_log=logs_dir,batch_size=256,device="cuda")
-    model = PPO.load("F:\\Pycharm_project\\RL\\models\\PPO\\1211-140713\\best_model.zip",env=env,print_system_info=True)
+    model = PPO.load("F:\\Pycharm_project\\RL\\models\\PPO\\1211-140713\\pick_model.zip",env=env,print_system_info=True)
     # model = TD3.load("F:\\Pycharm_project\\RL\\models\\DDPG\\1031-160549\\DDPG-run-eposide1.zip",env=env)
     model.set_logger(new_logger)
     tensorboard_callback = CustomCallback()

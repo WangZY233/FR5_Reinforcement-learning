@@ -516,9 +516,9 @@
   </joint>
   <link
     name="finger_link1">
-        <inertial>
+    <inertial>
       <origin
-        xyz="-0.0765920818887161 0.0785524897759977 0.00485564932597477"
+        xyz="-0.765920818887161 0.0785524897759977 0.00"
         rpy="0 0 0" />
       <mass value="1"/>
       <inertia ixx="0.02" ixy="0" ixz="0" iyy="0.05" iyz="0" izz="0.05"/>
@@ -530,11 +530,6 @@
       <geometry>
         <box size="0.01 0.08 0.03"/>
       </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.89804 0.91765 0.92941 1" />
-      </material>
     </visual>
     <collision>
       <origin
@@ -551,7 +546,6 @@
       <restitution value="1"/>
     </contact>
   </link>
-
   <joint
     name="fj1"
     type="prismatic">
@@ -565,8 +559,8 @@
     <axis
       xyz="1 0 0" />
     <limit
-      lower="-0.05"
-      upper="0.04"
+      lower="-0.1"
+      upper="0.1"
       effort="20"
       velocity="0.1" />
   </joint>
@@ -574,7 +568,7 @@
     name="finger_link2">
     <inertial>
       <origin
-        xyz="-0.0765920818887161 0.0800524897759977 0.00485564932597478"
+        xyz="-0.0765920818887161 0.0785524897759977 0.00485564932597478"
         rpy="0 0 0" />
       <mass value="1"/>
       <inertia ixx="0.02" ixy="0" ixz="0" iyy="0.05" iyz="0" izz="0.05"/>
@@ -586,11 +580,6 @@
       <geometry>
         <box size="0.01 0.08 0.03"/>
       </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.89804 0.91765 0.92941 1" />
-      </material>
     </visual>
     <collision>
       <origin
@@ -611,7 +600,7 @@
     name="fj2"
     type="prismatic">
     <origin
-      xyz="-0.0425 0.0087157 -0.0015"
+      xyz="-0.0425 0.0087157 0."
       rpy="1.5708 0 3.1416" />
     <parent
       link="hand_base_link" />
@@ -620,8 +609,8 @@
     <axis
       xyz="1 0 0" />
     <limit
-      lower="-0.05"
-      upper="0.04"
+      lower="-0.10"
+      upper="0.10"
       effort="20"
       velocity="0.1" />
   </joint>

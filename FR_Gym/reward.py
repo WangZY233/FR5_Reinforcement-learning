@@ -31,7 +31,7 @@ def cal_success_reward(self, distance):
         success_reward = - 1
         self.terminated = True
         logger.info("失败！执行步数过多！当前阶段：%s 执行步数：%s    距离目标:%s" % (self.stage, self.step_num, distance))
-        self.stage = 1
+        self.stage = 0
 
     return success_reward
 
@@ -59,7 +59,7 @@ def grasp_reward(self, diff=0):
     distance = get_distance(self)
     pose_reward = cal_pose_reward(self)
     real_distance = get_real_distance(self)
-    judge_success(self, distance, pose_reward, success_dis=0.015, success_pose=-100)
+    judge_success(self, distance, pose_reward, success_dis=0.02, success_pose=-100)
 
     # 计算奖励
     success_reward = cal_success_reward(self, distance)

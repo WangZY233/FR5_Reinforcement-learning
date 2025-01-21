@@ -763,6 +763,249 @@ class ActorCriticPolicy(BasePolicy):
         return self.value_net(latent_vf)
 
 
+
+class ActorCriticLSTMPolicy(BasePolicy):
+    def __init__(
+        self,
+        observation_space: spaces.Space,
+        action_space: spaces.Space,
+        lr_schedule: Schedule,
+        net_arch: Optional[Union[List[int], Dict[str, List[int]]]] = None,
+        activation_fn: Type[nn.Module] = nn.Tanh,
+        ortho_init: bool = True,
+        use_sde: bool = False,
+        log_std_init: float = 0.0,
+        full_std: bool = True,
+        use_expln: bool = False,
+        squash_output: bool = False,
+        features_extractor_class: Type[BaseFeaturesExtractor] = FlattenExtractor,
+        features_extractor_kwargs: Optional[Dict[str, Any]] = None,
+        share_features_extractor: bool = True,
+        normalize_images: bool = True,
+        optimizer_class: Type[th.optim.Optimizer] = th.optim.Adam,
+        optimizer_kwargs: Optional[Dict[str, Any]] = None,
+        lstm_hidden_size: int = 256,  # LSTM hidden state size
+        lstm_layers: int = 2,         # Number of LSTM layers
+    ):
+        super().__init__(observation_space, 
+                        action_space, 
+                        squash_output=squash_output,
+                        optimizer_class=optimizer_class,
+                        optimizer_kwargs=optimizer_kwargs)
+
+        self.lstm_hidden_size = lstm_hidden_size
+        self.lstm_layers = lstm_layers
+
+        self.features_extractor = self.make_features_extractor()
+        self.features_dim = self.features_extractor.features_dim
+
+        # LSTM for sequential feature extraction
+        self.lstm = nn.LSTM(
+            input_size=self.features_extractor.features_dim,
+            hidden_size=self.lstm_hidden_size,
+            num_layers=self.lstm_layers,
+            batch_first=True,
+        )
+
+        self.share_features_extractor = share_features_extractor
+        if self.share_features_extractor:
+            self.pi_features_extractor = self.features_extractor
+            self.vf_features_extractor = self.features_extractor
+        else:
+            self.pi_features_extractor = self.features_extractor
+            self.vf_features_extractor = self.make_features_extractor()
+        self.log_std_init = log_std_init
+        self.ortho_init = ortho_init
+        # Initialize networks
+        self._build(lr_schedule)
+
+    def _build(self, lr_schedule: Schedule) -> None:
+        """
+        Create the policy and value networks.
+        """
+        latent_dim_pi = self.lstm_hidden_size
+
+
+        # Policy network (actor)
+        self.action_dist = make_proba_distribution(self.action_space)
+        if isinstance(self.action_dist, DiagGaussianDistribution):
+            self.action_net, self.log_std = self.action_dist.proba_distribution_net(
+                latent_dim=latent_dim_pi, log_std_init=self.log_std_init
+            )
+        elif isinstance(self.action_dist, StateDependentNoiseDistribution):
+            self.action_net, self.log_std = self.action_dist.proba_distribution_net(
+                latent_dim=latent_dim_pi, latent_sde_dim=latent_dim_pi, log_std_init=self.log_std_init
+            )
+        elif isinstance(self.action_dist,
+                        (CategoricalDistribution, MultiCategoricalDistribution, BernoulliDistribution)):
+            self.action_net = self.action_dist.proba_distribution_net(latent_dim=latent_dim_pi)
+        else:
+            raise NotImplementedError(f"Unsupported distribution '{self.action_dist}'.")
+
+        # Value network (critic)
+        self.value_net = nn.Linear(self.lstm_hidden_size, 1)
+
+        # Orthogonal initialization for weights
+        if self.ortho_init:
+            self._initialize_weights()
+
+        # Optimizer
+        self.optimizer = self.optimizer_class(self.parameters(), lr=lr_schedule(1), **self.optimizer_kwargs)
+
+    def _initialize_weights(self) -> None:
+        """
+        Orthogonal initialization (used in PPO and A2C).
+        """
+        module_gains = {
+            self.action_net: 0.01,
+            self.value_net: 1,
+        }
+        for module, gain in module_gains.items():
+            module.apply(partial(self.init_weights, gain=gain))
+
+    def _predict(self, observation: th.Tensor, deterministic: bool = False) -> th.Tensor:
+        """
+        Get the action according to the policy for a given observation.
+        """
+        # Pass through the LSTM
+        features = self.extract_features(observation)
+        features = features.unsqueeze(1)  # Add a fake sequence length of 1
+
+        lstm_out, _ = self.lstm(features)
+        lstm_out = lstm_out[:, -1, :]  # Only the output of the last timestep
+        
+        # Get the action from the LSTM output
+        distribution = self._get_action_dist_from_latent(lstm_out)
+        actions = distribution.get_actions(deterministic=deterministic)
+        return actions
+
+    def forward(self, obs: th.Tensor, deterministic: bool = False) -> Tuple[th.Tensor, th.Tensor, th.Tensor]:
+        """
+        Forward pass through the policy and value networks (actor and critic).
+        """
+        features = self.extract_features(obs)
+        features = features.unsqueeze(1)  # Adding a fake sequence length
+
+        # Pass through LSTM
+        lstm_out, _ = self.lstm(features)
+        lstm_out = lstm_out[:, -1, :]  # Last output from LSTM
+
+        # Calculate the action and value
+        values = self.value_net(lstm_out)
+        distribution = self._get_action_dist_from_latent(lstm_out)
+        actions = distribution.get_actions(deterministic=deterministic)
+        log_prob = distribution.log_prob(actions)
+
+        # Reshape actions to match the action space shape
+        actions = actions.reshape((-1, *self.action_space.shape))  # type: ignore
+        return actions, values, log_prob
+
+    def evaluate_actions(self, obs: PyTorchObs, actions: th.Tensor) -> Tuple[th.Tensor, th.Tensor, Optional[th.Tensor]]:
+        """
+        Evaluate actions according to the current policy, given the observations.
+
+        :param obs: Observation
+        :param actions: Actions
+        :return: Estimated value, log likelihood of taking those actions, and entropy of the action distribution.
+        """
+        features = self.extract_features(obs)
+        features = features.unsqueeze(1)  # Add a fake sequence length
+
+        # Pass observations through the LSTM
+        lstm_out, _ = self.lstm(features)
+        lstm_out = lstm_out[:, -1, :]  # Only the output of the last timestep
+
+        distribution = self._get_action_dist_from_latent(lstm_out)
+        log_prob = distribution.log_prob(actions)
+        values = self.value_net(lstm_out)
+        entropy = distribution.entropy()
+
+        return values, log_prob, entropy
+
+    def _get_action_dist_from_latent(self, latent_pi: th.Tensor) -> Distribution:
+        """
+        Retrieve action distribution given the latent codes.
+
+        :param latent_pi: Latent code for the actor
+        :return: Action distribution
+        """
+        mean_actions = self.action_net(latent_pi)
+
+        if isinstance(self.action_dist, DiagGaussianDistribution):
+            return self.action_dist.proba_distribution(mean_actions, self.log_std)
+        elif isinstance(self.action_dist, CategoricalDistribution):
+            # Here mean_actions are the logits before the softmax
+            return self.action_dist.proba_distribution(action_logits=mean_actions)
+        elif isinstance(self.action_dist, MultiCategoricalDistribution):
+            # Here mean_actions are the flattened logits
+            return self.action_dist.proba_distribution(action_logits=mean_actions)
+        elif isinstance(self.action_dist, BernoulliDistribution):
+            # Here mean_actions are the logits (before rounding to get the binary actions)
+            return self.action_dist.proba_distribution(action_logits=mean_actions)
+        elif isinstance(self.action_dist, StateDependentNoiseDistribution):
+            return self.action_dist.proba_distribution(mean_actions, self.log_std, latent_pi)
+        else:
+            raise ValueError("Invalid action distribution")
+
+    def extract_features(self, obs: PyTorchObs, features_extractor: Optional[BaseFeaturesExtractor] = None) -> th.Tensor:
+        """
+        Extract features from observations.
+        """
+        if self.share_features_extractor:
+            return super().extract_features(obs, self.features_extractor if features_extractor is None else features_extractor)
+        else:
+            if features_extractor is not None:
+                warnings.warn(
+                    "Provided features_extractor will be ignored because the features extractor is not shared.",
+                    UserWarning,
+                )
+
+            pi_features = super().extract_features(obs, self.pi_features_extractor)
+            vf_features = super().extract_features(obs, self.vf_features_extractor)
+            return pi_features, vf_features
+
+    def predict_values(self, obs: PyTorchObs) -> th.Tensor:
+        """
+        Get the value estimate from the policy.
+        """
+        features = super().extract_features(obs, self.vf_features_extractor)
+        features = features.unsqueeze(1)  # Add sequence dimension for LSTM
+        lstm_out, _ = self.lstm(features)
+        lstm_out = lstm_out[:, -1, :]  # Only the last timestep's output
+        return self.value_net(lstm_out)
+
+    def predict(
+        self,
+        observation: Union[np.ndarray, Dict[str, np.ndarray]],
+        state: Optional[Tuple[np.ndarray, ...]] = None,
+        episode_start: Optional[np.ndarray] = None,
+        deterministic: bool = False,
+    ) -> Tuple[np.ndarray, Optional[Tuple[np.ndarray, ...]]]:
+        """
+        Get the policy action from an observation (and optional hidden state).
+        """
+        # Convert observation to tensor
+        obs_tensor, vectorized_env = self.obs_to_tensor(observation)
+
+        # Get action from the policy
+        with th.no_grad():
+            actions = self._predict(obs_tensor, deterministic=deterministic)
+
+        actions = actions.cpu().numpy().reshape((-1, *self.action_space.shape))  # type: ignore
+
+        # If using a continuous action space, squash output if needed
+        if isinstance(self.action_space, spaces.Box):
+            if self.squash_output:
+                actions = self.unscale_action(actions)
+            else:
+                actions = np.clip(actions, self.action_space.low, self.action_space.high)
+
+        # Remove batch dimension if needed
+        if not vectorized_env:
+            actions = actions.squeeze(axis=0)
+
+        return actions, state
+
 class ActorCriticCnnPolicy(ActorCriticPolicy):
     """
     CNN policy class for actor-critic algorithms (has both policy and value prediction).
@@ -788,7 +1031,7 @@ class ActorCriticCnnPolicy(ActorCriticPolicy):
         to pass to the features extractor.
     :param share_features_extractor: If True, the features extractor is shared between the policy and value networks.
     :param normalize_images: Whether to normalize images or not,
-         dividing by 255.0 (True by default)
+        dividing by 255.0 (True by default)
     :param optimizer_class: The optimizer to use,
         ``th.optim.Adam`` by default
     :param optimizer_kwargs: Additional keyword arguments,
@@ -861,7 +1104,7 @@ class MultiInputActorCriticPolicy(ActorCriticPolicy):
         to pass to the features extractor.
     :param share_features_extractor: If True, the features extractor is shared between the policy and value networks.
     :param normalize_images: Whether to normalize images or not,
-         dividing by 255.0 (True by default)
+        dividing by 255.0 (True by default)
     :param optimizer_class: The optimizer to use,
         ``th.optim.Adam`` by default
     :param optimizer_kwargs: Additional keyword arguments,
