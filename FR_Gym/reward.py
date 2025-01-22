@@ -23,7 +23,7 @@ def cal_success_reward(self, distance):
         if self.stage != 4:
             self.stage += 1
         else:
-            self.stage = 1
+            self.stage = 0
         # self.truncated = True
 
     # 机械臂执行步数过多

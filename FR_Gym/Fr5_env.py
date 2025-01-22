@@ -7,6 +7,7 @@
 import os
 import pybullet
 import sys
+
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../")
 import gymnasium as gym
@@ -28,28 +29,42 @@ class FR5_Env(gym.Env):
     """Custom Environment that follows gym interface."""
     metadata = {"render_modes": ["human"], "render_fps": 30}
 
-    def __init__(self, gui=False):
+    def __init__(self, gui=False, use_guide_model=True):
         super(FR5_Env).__init__()
-        self.use_stage_skip = False #是否启用阶段跳过以实现数据采集
-        self.stage_skip_rate = 0.3 #阶段跳过的概率
+        self.use_stage_skip = False  #是否启用阶段跳过以实现数据采集
+        self.stage_skip_rate = 0.4  #阶段跳过的概率
         self.step_num = 0
         self.Con_cube = None
         self.stage = 0
-        self.use_guide_model = True #是否以一定概率使用指导模型动作
-        self.guide_rate = 0.1
-        self.model_0 = PPO.load(
-            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/pick_model")
-        self.model_1 = PPO.load(
-            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/place_model")
-        self.model_2 = PPO.load(
-            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/button_model")
-        self.model_3 = PPO.load(
-            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/catch_model")
-        self.model_4 = PPO.load(
-            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/trans_model")
+        self.use_guide_model = use_guide_model  #是否以一定概率使用指导模型动作
+        self.guide_rate = 1
+        self.online = False
+        if self.online is False:
+            self.model_0 = PPO.load(
+                "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/pick_model")
+            self.model_1 = PPO.load(
+                "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/place_model")
+            self.model_2 = PPO.load(
+                "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/button_model")
+            self.model_3 = PPO.load(
+                "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/catch_model")
+            self.model_4 = PPO.load(
+                "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/trans_model")
+        else:
+            self.model_0 = PPO.load(
+                "/root/FR5/models/pick_model")
+            self.model_1 = PPO.load(
+                "/root/FR5/models/place_model")
+            self.model_2 = PPO.load(
+                "/root/FR5/models/button_model")
+            self.model_3 = PPO.load(
+                "/root/FR5/models/catch_model")
+            self.model_4 = PPO.load(
+                "/root/FR5/models/trans_model")
+
         # self.last_success = False
         print('模型载入完毕')
-        
+
         self.grasp_zero = [0, 0]
         self.grasp_zero_sym = [0.075, 0.075]
         self.grasp_effort_sym = [0.069, 0.069]
@@ -84,12 +99,20 @@ class FR5_Env(gym.Env):
         # self.first_model = PPO.load(
         #     "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_0/FR_Gym/FR5_Reinforcement-learning/models/PPO/1107-121135/pick_model.zip")
         # 创建机械臂
-        self.fr5 = self.p.loadURDF(
-            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/fr5_description/urdf/fr5v6.urdf",
-            useFixedBase=True, basePosition=[0, 0, 0],
-            baseOrientation=p.getQuaternionFromEuler([0, 0, np.pi]),
-            flags=p.URDF_USE_SELF_COLLISION
-        )
+        if self.online is False:
+            self.fr5 = self.p.loadURDF(
+                "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/fr5_description/urdf/fr5v6.urdf",
+                useFixedBase=True, basePosition=[0, 0, 0],
+                baseOrientation=p.getQuaternionFromEuler([0, 0, np.pi]),
+                flags=p.URDF_USE_SELF_COLLISION
+            )
+        else:
+            self.fr5 = self.p.loadURDF(
+                "/root/FR5/fr5_description/urdf/fr5v6.urdf",
+                useFixedBase=True, basePosition=[0, 0, 0],
+                baseOrientation=p.getQuaternionFromEuler([0, 0, np.pi]),
+                flags=p.URDF_USE_SELF_COLLISION
+            )
 
         # 创建桌子
         self.table = p.loadURDF("table/table.urdf", basePosition=[0, 0.5, -0.63],
@@ -99,11 +122,11 @@ class FR5_Env(gym.Env):
         self.button_length = 0.01
         self.button_height = 0.3
         buttonId = self.p.createCollisionShape(shapeType=p.GEOM_CYLINDER,
-                                            radius=0.015, height=self.button_length)
+                                               radius=0.015, height=self.button_length)
 
         self.button = self.p.createMultiBody(baseMass=0,  # 质量
-                                            baseCollisionShapeIndex=buttonId,
-                                            basePosition=[0.5, 0.5, 2])
+                                             baseCollisionShapeIndex=buttonId,
+                                             basePosition=[0.5, 0.5, 2])
 
         # 创建目标
         self.cup_height = 0.1
@@ -111,8 +134,8 @@ class FR5_Env(gym.Env):
                                                         radius=0.025, height=self.cup_height)
 
         self.target = self.p.createMultiBody(baseMass=0.2,  # 质量
-                                            baseCollisionShapeIndex=collisionTargetId,
-                                            basePosition=[0.5, 0.5, 2])
+                                             baseCollisionShapeIndex=collisionTargetId,
+                                             basePosition=[0.5, 0.5, 2])
 
         self.grasp_effort = [0.0080, 0.0080]
         self.grasp_zero = [0, 0]
@@ -123,10 +146,10 @@ class FR5_Env(gym.Env):
         # 创建目标杯子的台子
         self.targettable_height = 0.04
         tableId = self.p.createCollisionShape(shapeType=p.GEOM_CYLINDER,
-                                            radius=0.04, height=self.targettable_height)
+                                              radius=0.04, height=self.targettable_height)
         self.targettable = self.p.createMultiBody(baseMass=0,  # 质量
-                                                baseCollisionShapeIndex=tableId,
-                                                basePosition=[0.5, 0.5, 2])
+                                                  baseCollisionShapeIndex=tableId,
+                                                  basePosition=[0.5, 0.5, 2])
         p.changeDynamics(self.targettable, -1, lateralFriction=0.1, spinningFriction=0, rollingFriction=0)
 
         # # 创建障碍物
@@ -135,13 +158,13 @@ class FR5_Env(gym.Env):
                                                  halfExtents=[self.obstacle_wide * 2, self.obstacle_wide, 0.1])
 
         self.obstacle = self.p.createMultiBody(baseMass=0,  # 质量
-                                            baseCollisionShapeIndex=obstacleId,
-                                            basePosition=[0.5, 0.5, 2])
+                                               baseCollisionShapeIndex=obstacleId,
+                                               basePosition=[0.5, 0.5, 2])
 
         # 创建目标台子
         self.targettable_2_height = 0.04
         targettable_2Id = self.p.createCollisionShape(shapeType=p.GEOM_CYLINDER,
-                                                    radius=0.04, height=self.targettable_2_height)
+                                                      radius=0.04, height=self.targettable_2_height)
         self.targettable_2 = self.p.createMultiBody(baseMass=0,  # 质量
                                                     baseCollisionShapeIndex=targettable_2Id,
                                                     basePosition=[0.5, 0.5, 2])
@@ -178,10 +201,10 @@ class FR5_Env(gym.Env):
 
         # 执行action
         if self.use_guide_model and np.random.uniform(0, 1) < self.guide_rate:
-            action = guide_action 
+            action = guide_action
         Fr5_joint_angles = np.array(joint_angles[:6]) + (np.array(action[0:6]) / 180 * np.pi)
 
-        gripper = np.array([0,0])
+        gripper = np.array([0, 0])
 
         anglenow = np.hstack([Fr5_joint_angles, gripper])
         p.setJointMotorControlArray(self.fr5, [1, 2, 3, 4, 5, 6, 8, 9], p.POSITION_CONTROL,
@@ -199,7 +222,7 @@ class FR5_Env(gym.Env):
 
         self.step_num += 1
         return self.observation, self.reward, self.terminated, self.truncated, info
-            
+
     def step_1(self, action):
         '''step'''
         info = {}
@@ -220,7 +243,7 @@ class FR5_Env(gym.Env):
 
         # 执行action
         if self.use_guide_model and np.random.uniform(0, 1) < self.guide_rate:
-            action = guide_action 
+            action = guide_action
         Fr5_joint_angles = np.array(joint_angles[:6]) + (np.array(action[0:6]) / 180 * np.pi)
 
         gripper = np.array(self.grasp_effort)
@@ -265,7 +288,7 @@ class FR5_Env(gym.Env):
 
         # 执行action
         if self.use_guide_model and np.random.uniform(0, 1) < self.guide_rate:
-            action = guide_action 
+            action = guide_action
         Fr5_joint_angles = np.array(joint_angles[:6]) + (np.array(action[0:6]) / 180 * np.pi)
 
         # if self.step_num > 20:
@@ -314,10 +337,8 @@ class FR5_Env(gym.Env):
 
         # 执行action
         if self.use_guide_model and np.random.uniform(0, 1) < self.guide_rate:
-            action = guide_action 
+            action = guide_action
         Fr5_joint_angles = np.array(joint_angles[:6]) + (np.array(action[0:6]) / 180 * np.pi)
-
-
 
         gripper = np.array([0, 0])
 
@@ -359,9 +380,8 @@ class FR5_Env(gym.Env):
 
         # 执行action
         if self.use_guide_model and np.random.uniform(0, 1) < self.guide_rate:
-            action = guide_action 
+            action = guide_action
         Fr5_joint_angles = np.array(joint_angles[:6]) + (np.array(action[0:6]) / 180 * np.pi)
-
 
         gripper = np.array(self.grasp_effort)
 
@@ -404,7 +424,7 @@ class FR5_Env(gym.Env):
             self.grasp_effort = self.grasp_effort_ori
 
     def reset(self, seed=None, options=None):
-        if self.use_stage_skip == True and np.random.uniform(0, 1) < self.stage_skip_rate: #(1 - 1/(5-self.stage))
+        if self.use_stage_skip == True and np.random.uniform(0, 1) < self.stage_skip_rate:  #(1 - 1/(5-self.stage))
             return self.stage_skip()
         else:
             if self.stage == 0:
@@ -426,12 +446,12 @@ class FR5_Env(gym.Env):
         self.success = False
         # 重新设置机械臂的位置
         neutral_angle = [30, -137, 128, 9,
-                        30, 0, 0, 0]
+                         30, 0, 0, 0]
         neutral_angle = [x * math.pi / 180 for x in neutral_angle]
         p.setJointMotorControlArray(self.fr5, [1, 2, 3, 4, 5, 6, 8, 9], p.POSITION_CONTROL,
                                     targetPositions=neutral_angle)
         for _ in range(50):
-                    self.p.stepSimulation()
+            self.p.stepSimulation()
         '''干涉检测'''
         error_contact_points = p.getContactPoints(bodyA=self.fr5, bodyB=self.fr5)
         for contact_point in error_contact_points:
@@ -450,7 +470,7 @@ class FR5_Env(gym.Env):
         self.target_position = [self.goalx, self.goaly, self.goalz]
         # self.target_position = [0., 0.6, 0.2]
         self.targettable_2_position = [self.goalx, self.goaly,
-                                    self.goalz - self.cup_height / 2 - self.targettable_height / 2]
+                                       self.goalz - self.cup_height / 2 - self.targettable_height / 2]
 
         self.p.resetBasePositionAndOrientation(self.targettable_2, self.targettable_2_position, [0, 0, 0, 1])
         self.p.resetBasePositionAndOrientation(self.target, self.target_position, [0, 0, 0, 1])
@@ -468,7 +488,7 @@ class FR5_Env(gym.Env):
         infos['step_num'] = 0
         # print("observation", self.observation)
         return self.observation, infos
-        
+
     def reset_1(self, seed=None, options=None):
         """重置环境参数"""
         self.step_num = 0
@@ -479,7 +499,7 @@ class FR5_Env(gym.Env):
         # 重新设置目标咖啡机位置
         self.goalx = np.random.uniform(-0.2, 0.2, 1)[0]
         self.goaly = np.random.uniform(0.8, 0.9, 1)[0]
-        self.goalz = np.array([self.targettable_height + self.cup_height / 2])
+        self.goalz = self.targettable_height + self.cup_height / 2
         self.base_position = [self.goalx, self.goaly, self.button_height]
         self.p.resetBasePositionAndOrientation(self.obstacle, self.base_position, [0, 0, 0, 1])
         Euler = [math.pi / 2, 0, 0]
@@ -553,7 +573,7 @@ class FR5_Env(gym.Env):
         for i in range(10):
             self.p.stepSimulation()
             # time.sleep(1. / 240.)
-        
+
         infos = {}
         infos['is_success'] = False
         infos['reward'] = 0
@@ -577,7 +597,7 @@ class FR5_Env(gym.Env):
         self.goaly = 0.6
         self.goalz = self.targettable_2_height + self.cup_height / 2
         self.targettable_2_position = [self.goalx, self.goaly,
-                                    self.goalz - self.cup_height / 2 - self.targettable_height / 2 - 0.01]
+                                       self.goalz - self.cup_height / 2 - self.targettable_height / 2 - 0.01]
         self.p.resetBasePositionAndOrientation(self.targettable_2, self.targettable_2_position, [0, 0, 0, 1])
 
         self.get_observation_4()
@@ -604,14 +624,14 @@ class FR5_Env(gym.Env):
             while not done:
                 action, _ = self.model_0.predict(observation=self.guide_observation, deterministic=True)
                 state, reward, done, _, info = self.step_0(action=action)
-            return self.reset()        # 由于最后未必执行成功，所以需要根据stage进行重置
+            return self.reset()  # 由于最后未必执行成功，所以需要根据stage进行重置
         elif self.stage == 1:
             done = False
             state, _ = self.reset_1()
             while not done:
                 action, _ = self.model_1.predict(observation=self.guide_observation, deterministic=True)
                 state, reward, done, _, info = self.step_1(action=action)
-            return self.reset()       
+            return self.reset()
         elif self.stage == 2:
             done = False
             state, _ = self.reset_2()
@@ -667,8 +687,8 @@ class FR5_Env(gym.Env):
         obs_joint_angles = ((np.array(joint_angles, dtype=np.float32) / 180) + 1) / 2
         # x,y,z坐标归一化
         obs_gripper_centre_pos = np.array([(gripper_centre_pos[0] + 0.5) / 1,
-                                        (gripper_centre_pos[1] + 0.5) / 2,
-                                        (gripper_centre_pos[2] + 0.5) / 1], dtype=np.float32)
+                                           (gripper_centre_pos[1] + 0.5) / 2,
+                                           (gripper_centre_pos[2] + 0.5) / 1], dtype=np.float32)
 
         obs_target_position = np.array([(self.goalx + 0.4) / 0.8,
                                         self.goaly / 1,
@@ -684,8 +704,7 @@ class FR5_Env(gym.Env):
 
         self.observation = self.observation.flatten()
         self.observation = self.observation.reshape(1, 16)
-        
-        
+
     def get_observation_0(self, add_noise=False):
         """计算observation"""
         Gripper_pos = p.getLinkState(self.fr5, 6)[0]
@@ -707,8 +726,8 @@ class FR5_Env(gym.Env):
         obs_joint_angles = ((np.array(joint_angles, dtype=np.float32) / 180) + 1) / 2
         # x,y,z坐标归一化
         obs_gripper_centre_pos = np.array([(gripper_centre_pos[0] + 0.5) / 1,
-                                        (gripper_centre_pos[1] + 0.5) / 2,
-                                        (gripper_centre_pos[2] + 0.5) / 1], dtype=np.float32)
+                                           (gripper_centre_pos[1] + 0.5) / 2,
+                                           (gripper_centre_pos[2] + 0.5) / 1], dtype=np.float32)
 
         obs_target_position = np.array([(self.goalx + 0.4) / 0.8,
                                         self.goaly / 1,
@@ -723,7 +742,7 @@ class FR5_Env(gym.Env):
 
         self.guide_observation = self.guide_observation.flatten()
         self.guide_observation = self.guide_observation.reshape(1, 15)
-        
+
     def get_observation_1(self, add_noise=False):
         """计算observation"""
         Gripper_posx = p.getLinkState(self.fr5, 6)[0][0]
@@ -758,8 +777,8 @@ class FR5_Env(gym.Env):
         obs_joint_angles = ((np.array(joint_angles, dtype=np.float32) / 180) + 1) / 2
         obs_gripper_angles = np.array(gripper_angle, dtype=np.float32)
         obs_gripper_centre_pos = np.array([(gripper_centre_pos[0] + 0.922) / 1.844,
-                                    (gripper_centre_pos[1] + 0.922) / 1.844,
-                                    (gripper_centre_pos[2] + 0.5) / 1], dtype=np.float32)
+                                           (gripper_centre_pos[1] + 0.922) / 1.844,
+                                           (gripper_centre_pos[2] + 0.5) / 1], dtype=np.float32)
         obs_target_position = np.array([(self.goalx + 0.5) / 1,
                                         (self.goaly - 0.5) / 0.1,
                                         (self.goalz - 0.05) / 0.1], dtype=np.float32)
@@ -804,8 +823,8 @@ class FR5_Env(gym.Env):
         obs_joint_angles = ((np.array(joint_angles, dtype=np.float32) / 180) + 1) / 2
         obs_gripper_angles = np.array(gripper_angle, dtype=np.float32)
         obs_gripper_centre_pos = np.array([(gripper_centre_pos[0] + 0.922) / 1.844,
-                                        (gripper_centre_pos[1] + 0.922) / 1.844,
-                                        (gripper_centre_pos[2] + 0.5) / 1], dtype=np.float32)
+                                           (gripper_centre_pos[1] + 0.922) / 1.844,
+                                           (gripper_centre_pos[2] + 0.5) / 1], dtype=np.float32)
         obs_target_position = np.array([self.goalx + 0.4 / 0.8,
                                         (self.goaly - 0.7) / 0.25,
                                         (self.goalz - self.button_height + 0.05) / 0.1], dtype=np.float32)
@@ -849,8 +868,8 @@ class FR5_Env(gym.Env):
         obs_joint_angles = ((np.array(joint_angles, dtype=np.float32) / 180) + 1) / 2
         obs_gripper_angles = np.array(gripper_angle, dtype=np.float32)
         obs_gripper_centre_pos = np.array([(gripper_centre_pos[0] + 0.922) / 1.844,
-                                        (gripper_centre_pos[1] + 0.922) / 1.844,
-                                        (gripper_centre_pos[2] + 0.5) / 1], dtype=np.float32)
+                                           (gripper_centre_pos[1] + 0.922) / 1.844,
+                                           (gripper_centre_pos[2] + 0.5) / 1], dtype=np.float32)
 
         obs_target_position = np.array([self.goalx + 0.4 / 0.8,
                                         (self.goaly - 0.7) / 0.25,
@@ -896,8 +915,8 @@ class FR5_Env(gym.Env):
         obs_joint_angles = ((np.array(joint_angles, dtype=np.float32) / 180) + 1) / 2
         obs_gripper_angles = np.array(gripper_angle, dtype=np.float32)
         obs_gripper_centre_pos = np.array([(gripper_centre_pos[0] + 0.922) / 1.844,
-                                        (gripper_centre_pos[1] + 0.922) / 1.844,
-                                        (gripper_centre_pos[2] + 0.5) / 1], dtype=np.float32)
+                                           (gripper_centre_pos[1] + 0.922) / 1.844,
+                                           (gripper_centre_pos[2] + 0.5) / 1], dtype=np.float32)
 
         obs_target_position = np.array([self.goalx + 0.4 / 0.8,
                                         (self.goaly - 0.3) / 0.4,
