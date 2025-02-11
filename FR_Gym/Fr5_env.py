@@ -29,15 +29,17 @@ class FR5_Env(gym.Env):
     """Custom Environment that follows gym interface."""
     metadata = {"render_modes": ["human"], "render_fps": 30}
 
-    def __init__(self, gui=False, use_guide_model=True):
+    def __init__(self, gui=False, use_guide_model=True, test=False, stage_skip_rate=0, guide_rate=1.0):
         super(FR5_Env).__init__()
         self.use_stage_skip = False  #是否启用阶段跳过以实现数据采集
-        self.stage_skip_rate = 0.4  #阶段跳过的概率
+        self.stage_skip_rate = stage_skip_rate  #阶段跳过的概率
+        self.test = test
         self.step_num = 0
         self.Con_cube = None
         self.stage = 0
-        self.use_guide_model = use_guide_model  #是否以一定概率使用指导模型动作
-        self.guide_rate = 1
+        self.use_guide_model = use_guide_model #是否以一定概率使用指导模型动作
+        self.guide_rate = guide_rate if test is False else 0#指导模型动作的概率
+        self.info = ""
         self.online = False
         if self.online is False:
             self.model_0 = PPO.load(
@@ -67,7 +69,7 @@ class FR5_Env(gym.Env):
 
         self.grasp_zero = [0, 0]
         self.grasp_zero_sym = [0.075, 0.075]
-        self.grasp_effort_sym = [0.069, 0.069]
+        self.grasp_effort_sym = [0.065, 0.065]
         self.grasp_effort_ori = [0.003, 0.003]
         # 设置最小的关节变化量
         low_action = np.array([-1.0, -1.0, -1.0, -1.0, -1.0, -1.0])
@@ -463,7 +465,6 @@ class FR5_Env(gym.Env):
                     self.p.stepSimulation()
                 break
         # 重新设置目标位置
-
         self.goalx = np.random.uniform(0.1, 0.35, 1)[0]
         self.goaly = np.random.uniform(0.45, 0.6, 1)[0]
         self.goalz = np.random.uniform(0.06, 0.1, 1)[0]

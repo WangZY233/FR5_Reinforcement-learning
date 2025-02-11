@@ -12,7 +12,7 @@ now = time.strftime('%m%d-%H%M%S', time.localtime())
 def get_args():
     parser = argparse.ArgumentParser(description="Running time configurations")
     
-    parser.add_argument('--model_path', type=str, default="FR5_Reinforcement-learning/models/PPO/pick_model.zip")
+    parser.add_argument('--model_path', type=str, default="FR5_Reinforcement-learning/models/PPO/best_model.zip")
     parser.add_argument('--test_num', type=int, default=100)
     parser.add_argument('--gui', type=bool, default=False)
     parser.add_argument('--models_dir', type=str, default=f"FR5_Reinforcement-learning/models/PPO/"+now)

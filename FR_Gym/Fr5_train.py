@@ -36,7 +36,13 @@ test = args.test
 def make_env(i, env_test=False):
     def _init():
         if i == 0:
-            env = FR5_Env(gui=False)
+            print("创建测试模型", i)
+            env = FR5_Env(gui=False, use_guide_model=True, guide_rate=1.0)
+            with open(models_dir+'/env_attributes.txt', 'w') as file:
+                for attr, value in vars(env).items():
+                    file.write(f"{attr}: {value}\n")
+
+            print("实例的属性及其值已写入到 env_attributes.txt 文件中。")
         else:
             env = FR5_Env(gui=False)
         env = Monitor(env, logs_dir)
@@ -66,15 +72,16 @@ if __name__ == '__main__':
 
     # HACK
     # Define and Train the agent
-    model = PPO("LSTMPolicy", env, verbose=1, tensorboard_log=logs_dir, device="cuda")
-    # model = PPO.load("/home/wangzy/FR5_Reinforcement-learning-long_sequence/FR5_Reinforcement-learning/models/PPO/1226-113348/pick_model.zip",env)
+    model = PPO("LSTMPolicy", env, verbose=1, tensorboard_log=logs_dir, device="cuda",
+                policy_kwargs=dict(lstm_layers=2))
+    # model = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/FR_Gym/FR5_Reinforcement-learning/models/PPO/0123-223501/PPO-run-eposide500.zip",env)
     model.set_logger(new_logger)
     tensorboard_callback = TensorboardCallback()
 
     # 创建测试环境回调函数
     eval_callback = EvalCallback(env, best_model_save_path=models_dir,
-                                log_path=logs_dir, eval_freq=3000,
-                                deterministic=True, render=False, n_eval_episodes=10)
+                                 log_path=logs_dir, eval_freq=3000,
+                                 deterministic=True, render=False, n_eval_episodes=10)
 
     TIMESTEPS = args.timesteps
     for eposide in range(1000):
@@ -87,7 +94,7 @@ if __name__ == '__main__':
                     # 在每一步调用的回调，可以用CheckpointCallback来创建一个存档点和规定存档间隔。
                     log_interval=10  #  记录一次信息的时间步数
                     )
-        print("model_dir:", models_dir)
-        # 保存模型
-        model.save(models_dir + f"/PPO-run-eposide{eposide}")
-        logger.info(f"**************eposide--{eposide} saved**************")
+        if eposide % 5 == 0:
+            print("model_dir:", models_dir)
+            model.save(models_dir + f"/PPO-run-eposide{eposide}")
+            logger.info(f"**************eposide--{eposide} saved**************")

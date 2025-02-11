@@ -1,8 +1,5 @@
 import sys
 import os
-import numpy as np
-from scipy.spatial.transform import Rotation as R
-import tensorflow as tf
 from tensorboardX import SummaryWriter
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../")
@@ -15,35 +12,57 @@ from utils.arguments import get_args
 
 if __name__ == '__main__':
     args, kwargs = get_args()
-    env = FR5_Env(gui=False)
+    env = FR5_Env(gui=True, test=True)
     env.render()
+    online = False
 
-    model_dir = "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/FR5_Reinforcement-learning/models/PPO/0122-145712/"
     success_rate = []
+    if online is False:
+        model_dir = "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/FR5_Reinforcement-learning/models/PPO/0122-145712/"
+    else:
+        model_dir = "/root/FR5/FR5_Reinforcement-learning/models/PPO/0125-123851/"
 
-    # 创建TensorBoard的SummaryWriter对象
-    log_dir = "./test_logs/"
-    success_rate = []
+    # 创建TensorBoard的SummaryWriter对象，在名称中添加model_dir最后一个文件夹的名称和当前时间
+    log_dir = "./test_logs_new/" + model_dir.split("/")[-2] + "/" + time.strftime('%m%d-%H%M%S', time.localtime())
     writer = SummaryWriter(log_dir)
-    model_0 = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/pick_model")
-    model_1 = PPO.load(
-        "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/place_model")
-    model_2 = PPO.load(
-        "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/button_model")
-    model_3 = PPO.load(
-        "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/catch_model")
-    model_4 = PPO.load(
-        "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/trans_model")
+    if online is False:
+        model_0 = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/pick_model")
+        model_1 = PPO.load(
+            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/place_model")
+        model_2 = PPO.load(
+            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/button_model")
+        model_3 = PPO.load(
+            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/catch_model")
+        model_4 = PPO.load(
+            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/trans_model")
+    else:
+        model_0 = PPO.load(
+            "/root/FR5/models/pick_model")
+        model_1 = PPO.load(
+            "/root/FR5/models/place_model")
+        model_2 = PPO.load(
+            "/root/FR5/models/button_model")
+        model_3 = PPO.load(
+            "/root/FR5/models/catch_model")
+        model_4 = PPO.load(
+            "/root/FR5/models/trans_model")
     guide_model = [model_0, model_1, model_2, model_3, model_4]
-    for episode in range(1001):
+    for _ in range(200):
+        episode = (_) * 5 + 0
         model_path = os.path.join(model_dir, f"PPO-run-eposide{episode}.zip")
-        if not os.path.exists(model_path):
-            continue
+        while True:
+            if not os.path.exists(model_path):
+                print("模型", episode, "未就绪，等待")
+                time.sleep(60)
+            else:
+                break
+
         model_path = os.path.splitext(model_path)[0]
         success_rate_episode = []
         model = PPO.load(model_path)
         for test_stage in range(5):
             test_num = args.test_num  # 测试次数
+            test_num = 50  # 测试次数
             success_num = 0  # 成功次数
             print("测试次数：", test_num)
             for i in range(test_num):
@@ -76,15 +95,16 @@ if __name__ == '__main__':
                     # time.sleep(0.02)
                     if info['is_success']:
                         success_num += 1
-                print("奖励：", score)
+                print("模型：", episode, "阶段：", test_stage, "奖励：", score)
             success_rate_episode.append(success_num / test_num)
-            print("阶段：", test_stage, "成功率：", success_rate[test_stage])
+            print("模型：", episode, "阶段：", test_stage, "成功率：", success_rate_episode[test_stage])
         success_rate.append(success_rate_episode)
-        print("模型：", episode,"成功率：", success_rate[-1])
+        print("模型：", episode, "成功率：", success_rate[-1], "平均成功率：", sum(success_rate[-1]) / 5)
         # 将成功率写入TensorBoard
+
         for i, rate in enumerate(success_rate_episode):
             writer.add_scalar(f'Success_Rate/Stage_{i}', rate, episode)
-        #
+        writer.add_scalar(f'Success_Rate/Average', sum(success_rate_episode) / 5, episode)
 
     print("成功率：", success_rate)
     env.close()
