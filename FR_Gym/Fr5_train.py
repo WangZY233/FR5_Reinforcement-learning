@@ -37,7 +37,8 @@ def make_env(i, env_test=False):
     def _init():
         if i == 0:
             print("创建测试模型", i)
-            env = FR5_Env(gui=False, use_guide_model=True, guide_rate=1.0)
+            env = FR5_Env(gui=False, use_guide_model=True, guide_rate=1.0,
+                          info="尝试减少随机性")
             with open(models_dir+'/env_attributes.txt', 'w') as file:
                 for attr, value in vars(env).items():
                     file.write(f"{attr}: {value}\n")

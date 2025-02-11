@@ -19,7 +19,7 @@ from utils.arguments import get_args
 
 if __name__ == '__main__':
     args, kwargs = get_args()
-    env = FR5_Env(gui=True, guide_rate=0.)
+    env = FR5_Env(gui=True, guide_rate=0)
     env.render()
     model = PPO.load(
         "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/FR5_Reinforcement-learning/models/PPO/0122-145712/PPO-run-eposide300.zip")

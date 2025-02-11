@@ -12,13 +12,13 @@ from utils.arguments import get_args
 
 if __name__ == '__main__':
     args, kwargs = get_args()
-    env = FR5_Env(gui=True, test=True)
+    env = FR5_Env(gui=False, test=True)
     env.render()
     online = False
 
     success_rate = []
     if online is False:
-        model_dir = "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/FR5_Reinforcement-learning/models/PPO/0122-145712/"
+        model_dir = "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/FR_Gym/FR5_Reinforcement-learning/models/PPO/0211-214709/"
     else:
         model_dir = "/root/FR5/FR5_Reinforcement-learning/models/PPO/0125-123851/"
 
@@ -63,10 +63,13 @@ if __name__ == '__main__':
         for test_stage in range(5):
             test_num = args.test_num  # 测试次数
             test_num = 50  # 测试次数
+            error_num = 0  # 前置任务失败次数
+            info = {"is_success": True}
             success_num = 0  # 成功次数
             print("测试次数：", test_num)
             for i in range(test_num):
                 env.stage = 0
+                info = {"is_success": True}
                 for j in range(test_stage):
                     # time.sleep(1)
                     done = False
@@ -81,6 +84,10 @@ if __name__ == '__main__':
                         state, reward, done, _, info = env.step(action=action)
                         score += reward
                         # time.sleep(0.02)
+                if not info['is_success']:
+                    error_num += 1
+                    print("前置任务失败！不计入总次数")
+                    continue
                 done = False
                 score = 0
                 # time.sleep(3)
@@ -96,7 +103,7 @@ if __name__ == '__main__':
                     if info['is_success']:
                         success_num += 1
                 print("模型：", episode, "阶段：", test_stage, "奖励：", score)
-            success_rate_episode.append(success_num / test_num)
+            success_rate_episode.append(success_num / (test_num-error_num))
             print("模型：", episode, "阶段：", test_stage, "成功率：", success_rate_episode[test_stage])
         success_rate.append(success_rate_episode)
         print("模型：", episode, "成功率：", success_rate[-1], "平均成功率：", sum(success_rate[-1]) / 5)

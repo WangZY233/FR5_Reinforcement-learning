@@ -29,7 +29,7 @@ class FR5_Env(gym.Env):
     """Custom Environment that follows gym interface."""
     metadata = {"render_modes": ["human"], "render_fps": 30}
 
-    def __init__(self, gui=False, use_guide_model=True, test=False, stage_skip_rate=0, guide_rate=1.0):
+    def __init__(self, gui=False, use_guide_model=True, test=False, stage_skip_rate=0, guide_rate=1.0,info = ""):
         super(FR5_Env).__init__()
         self.use_stage_skip = False  #是否启用阶段跳过以实现数据采集
         self.stage_skip_rate = stage_skip_rate  #阶段跳过的概率
@@ -39,7 +39,7 @@ class FR5_Env(gym.Env):
         self.stage = 0
         self.use_guide_model = use_guide_model #是否以一定概率使用指导模型动作
         self.guide_rate = guide_rate if test is False else 0#指导模型动作的概率
-        self.info = ""
+        self.info = info
         self.online = False
         if self.online is False:
             self.model_0 = PPO.load(
@@ -464,10 +464,14 @@ class FR5_Env(gym.Env):
                 for _ in range(10):
                     self.p.stepSimulation()
                 break
-        # 重新设置目标位置
-        self.goalx = np.random.uniform(0.1, 0.35, 1)[0]
-        self.goaly = np.random.uniform(0.45, 0.6, 1)[0]
-        self.goalz = np.random.uniform(0.06, 0.1, 1)[0]
+        # # 重新设置目标位置
+        # self.goalx = np.random.uniform(0.1, 0.35, 1)[0]
+        # self.goaly = np.random.uniform(0.45, 0.6, 1)[0]
+        # self.goalz = np.random.uniform(0.06, 0.1, 1)[0]
+        # 减小随机性
+        self.goalx = np.random.uniform(0.2, 0.3, 1)[0]
+        self.goaly = np.random.uniform(0.5, 0.6, 1)[0]
+        self.goalz = np.random.uniform(0.06, 0.08, 1)[0]
         self.target_position = [self.goalx, self.goaly, self.goalz]
         # self.target_position = [0., 0.6, 0.2]
         self.targettable_2_position = [self.goalx, self.goaly,
@@ -498,7 +502,11 @@ class FR5_Env(gym.Env):
         self.success = False
 
         # 重新设置目标咖啡机位置
-        self.goalx = np.random.uniform(-0.2, 0.2, 1)[0]
+        # self.goalx = np.random.uniform(-0.2, 0.2, 1)[0]
+        # self.goaly = np.random.uniform(0.8, 0.9, 1)[0]
+        # self.goalz = self.targettable_height + self.cup_height / 2
+        # 减小随机性
+        self.goalx = np.random.uniform(0.1, 0.2, 1)[0]
         self.goaly = np.random.uniform(0.8, 0.9, 1)[0]
         self.goalz = self.targettable_height + self.cup_height / 2
         self.base_position = [self.goalx, self.goaly, self.button_height]
@@ -588,14 +596,9 @@ class FR5_Env(gym.Env):
         self.reward = 0
         self.terminated = False
         self.success = False
-        if np.random.uniform(0, 1) > 1:
-            self.goalx = np.random.uniform(0.25, 0.4, 1)[0]
-        else:
-            self.goalx = np.random.uniform(-0.4, -0.25, 1)[0]
-        self.goaly = np.random.uniform(0.3, 0.7, 1)[0]
+        self.goalx = np.random.uniform(0.25, 0.35, 1)[0]
+        self.goaly = np.random.uniform(0.6, 0.7, 1)[0]
 
-        self.goalx = 0.3
-        self.goaly = 0.6
         self.goalz = self.targettable_2_height + self.cup_height / 2
         self.targettable_2_position = [self.goalx, self.goaly,
                                        self.goalz - self.cup_height / 2 - self.targettable_height / 2 - 0.01]
