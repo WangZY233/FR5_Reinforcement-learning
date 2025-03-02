@@ -35,17 +35,18 @@ test = args.test
 
 def make_env(i, env_test=False):
     def _init():
-        if i == 0:
+        online = True
+        if i % 2 == 0:
             print("创建测试模型", i)
-            env = FR5_Env(gui=False, use_guide_model=True, guide_rate=1.0,
-                          info="尝试减少随机性")
+            env = FR5_Env(gui=False, use_guide_model=True, guide_rate=1.0, online=online,
+                          info="创建4个专家环境和4个探索环境")
             with open(models_dir+'/env_attributes.txt', 'w') as file:
                 for attr, value in vars(env).items():
                     file.write(f"{attr}: {value}\n")
 
             print("实例的属性及其值已写入到 env_attributes.txt 文件中。")
         else:
-            env = FR5_Env(gui=False)
+            env = FR5_Env(gui=False, use_guide_model=False, online=online)
         env = Monitor(env, logs_dir)
         env.render()
         env.reset()
@@ -85,7 +86,7 @@ if __name__ == '__main__':
                                  deterministic=True, render=False, n_eval_episodes=10)
 
     TIMESTEPS = args.timesteps
-    for eposide in range(1000):
+    for eposide in range(500):
         # 创建 CheckpointCallback 实例来保存模型检查点
         checkpoint_callback = CheckpointCallback(save_freq=1000, save_path=checkpoints)
         model.learn(total_timesteps=TIMESTEPS,

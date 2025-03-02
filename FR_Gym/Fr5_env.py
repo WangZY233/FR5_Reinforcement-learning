@@ -29,7 +29,8 @@ class FR5_Env(gym.Env):
     """Custom Environment that follows gym interface."""
     metadata = {"render_modes": ["human"], "render_fps": 30}
 
-    def __init__(self, gui=False, use_guide_model=True, test=False, stage_skip_rate=0, guide_rate=1.0,info = ""):
+    def __init__(self, gui=False, use_guide_model=True, test=False, stage_skip_rate=0,
+                 guide_rate=1.0, online=False ,info=""):
         super(FR5_Env).__init__()
         self.use_stage_skip = False  #是否启用阶段跳过以实现数据采集
         self.stage_skip_rate = stage_skip_rate  #阶段跳过的概率
@@ -37,10 +38,10 @@ class FR5_Env(gym.Env):
         self.step_num = 0
         self.Con_cube = None
         self.stage = 0
-        self.use_guide_model = use_guide_model #是否以一定概率使用指导模型动作
-        self.guide_rate = guide_rate if test is False else 0#指导模型动作的概率
+        self.use_guide_model = use_guide_model  #是否以一定概率使用指导模型动作
+        self.guide_rate = guide_rate if test is False else 0  #指导模型动作的概率
         self.info = info
-        self.online = False
+        self.online = online
         if self.online is False:
             self.model_0 = PPO.load(
                 "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/pick_model")
@@ -247,7 +248,6 @@ class FR5_Env(gym.Env):
         if self.use_guide_model and np.random.uniform(0, 1) < self.guide_rate:
             action = guide_action
         Fr5_joint_angles = np.array(joint_angles[:6]) + (np.array(action[0:6]) / 180 * np.pi)
-
         gripper = np.array(self.grasp_effort)
 
         anglenow = np.hstack([Fr5_joint_angles, gripper])
@@ -291,6 +291,7 @@ class FR5_Env(gym.Env):
         # 执行action
         if self.use_guide_model and np.random.uniform(0, 1) < self.guide_rate:
             action = guide_action
+
         Fr5_joint_angles = np.array(joint_angles[:6]) + (np.array(action[0:6]) / 180 * np.pi)
 
         # if self.step_num > 20:

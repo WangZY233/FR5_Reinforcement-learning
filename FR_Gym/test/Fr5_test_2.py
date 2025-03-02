@@ -12,15 +12,14 @@ from utils.arguments import get_args
 
 if __name__ == '__main__':
     args, kwargs = get_args()
-    env = FR5_Env(gui=False, test=True)
-    env.render()
     online = False
-
+    env = FR5_Env(gui=False, test=True, online=online)
+    env.render()
     success_rate = []
     if online is False:
-        model_dir = "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/FR_Gym/FR5_Reinforcement-learning/models/PPO/0211-214709/"
+        model_dir = "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/FR_Gym/FR5_Reinforcement-learning/models/PPO/0210-231558/"
     else:
-        model_dir = "/root/FR5/FR5_Reinforcement-learning/models/PPO/0125-123851/"
+        model_dir = "/root/FR5/FR5_Reinforcement-learning/models/PPO/0211-221213/"
 
     # 创建TensorBoard的SummaryWriter对象，在名称中添加model_dir最后一个文件夹的名称和当前时间
     log_dir = "./test_logs_new/" + model_dir.split("/")[-2] + "/" + time.strftime('%m%d-%H%M%S', time.localtime())
@@ -47,7 +46,7 @@ if __name__ == '__main__':
         model_4 = PPO.load(
             "/root/FR5/models/trans_model")
     guide_model = [model_0, model_1, model_2, model_3, model_4]
-    for _ in range(200):
+    for _ in range(100):
         episode = (_) * 5 + 0
         model_path = os.path.join(model_dir, f"PPO-run-eposide{episode}.zip")
         while True:
@@ -103,7 +102,10 @@ if __name__ == '__main__':
                     if info['is_success']:
                         success_num += 1
                 print("模型：", episode, "阶段：", test_stage, "奖励：", score)
-            success_rate_episode.append(success_num / (test_num-error_num))
+            if test_num - error_num == 0:
+                success_rate_episode.append(0)
+            else:
+                success_rate_episode.append(success_num / (test_num - error_num))
             print("模型：", episode, "阶段：", test_stage, "成功率：", success_rate_episode[test_stage])
         success_rate.append(success_rate_episode)
         print("模型：", episode, "成功率：", success_rate[-1], "平均成功率：", sum(success_rate[-1]) / 5)
