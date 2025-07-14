@@ -17,7 +17,7 @@ if __name__ == '__main__':
     env.render()
     success_rate = []
     if online is False:
-        model_dir = "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/FR_Gym/FR5_Reinforcement-learning/models/PPO/0210-231558/"
+        model_dir = "/home/dianrobot/PycharmProjects/FR5_Reinforcement-learning/FR_Gym/FR5_Reinforcement-learning/models/PPO/0309-153002/"
     else:
         model_dir = "/root/FR5/FR5_Reinforcement-learning/models/PPO/0211-221213/"
 
@@ -25,15 +25,16 @@ if __name__ == '__main__':
     log_dir = "./test_logs_new/" + model_dir.split("/")[-2] + "/" + time.strftime('%m%d-%H%M%S', time.localtime())
     writer = SummaryWriter(log_dir)
     if online is False:
-        model_0 = PPO.load("/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/pick_model")
+        model_0 = PPO.load(
+            "/home/dianrobot/PycharmProjects/FR5_Reinforcement-learning/models/pick_model")
         model_1 = PPO.load(
-            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/place_model")
+            "/home/dianrobot/PycharmProjects/FR5_Reinforcement-learning/models/place_model")
         model_2 = PPO.load(
-            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/button_model")
+            "/home/dianrobot/PycharmProjects/FR5_Reinforcement-learning/models/button_model")
         model_3 = PPO.load(
-            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/catch_model")
+            "/home/dianrobot/PycharmProjects/FR5_Reinforcement-learning/models/catch_model")
         model_4 = PPO.load(
-            "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/trans_model")
+            "/home/dianrobot/PycharmProjects/FR5_Reinforcement-learning/models/trans_model")
     else:
         model_0 = PPO.load(
             "/root/FR5/models/pick_model")

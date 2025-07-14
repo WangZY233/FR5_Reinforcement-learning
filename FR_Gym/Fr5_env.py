@@ -44,15 +44,15 @@ class FR5_Env(gym.Env):
         self.online = online
         if self.online is False:
             self.model_0 = PPO.load(
-                "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/pick_model")
+                "/home/dianrobot/PycharmProjects/FR5_Reinforcement-learning/models/pick_model")
             self.model_1 = PPO.load(
-                "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/place_model")
+                "/home/dianrobot/PycharmProjects/FR5_Reinforcement-learning/models/place_model")
             self.model_2 = PPO.load(
-                "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/button_model")
+                "/home/dianrobot/PycharmProjects/FR5_Reinforcement-learning/models/button_model")
             self.model_3 = PPO.load(
-                "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/catch_model")
+                "/home/dianrobot/PycharmProjects/FR5_Reinforcement-learning/models/catch_model")
             self.model_4 = PPO.load(
-                "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/models/trans_model")
+                "/home/dianrobot/PycharmProjects/FR5_Reinforcement-learning/models/trans_model")
         else:
             self.model_0 = PPO.load(
                 "/root/FR5/models/pick_model")
@@ -104,7 +104,7 @@ class FR5_Env(gym.Env):
         # 创建机械臂
         if self.online is False:
             self.fr5 = self.p.loadURDF(
-                "/home/woshihg/PycharmProjects/FR5_Reinforcement-learning_longSequence/fr5_description/urdf/fr5v6.urdf",
+                "/home/dianrobot/PycharmProjects/FR5_Reinforcement-learning/fr5_description/urdf/fr5v6.urdf",
                 useFixedBase=True, basePosition=[0, 0, 0],
                 baseOrientation=p.getQuaternionFromEuler([0, 0, np.pi]),
                 flags=p.URDF_USE_SELF_COLLISION

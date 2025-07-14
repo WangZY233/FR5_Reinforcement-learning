@@ -16,7 +16,7 @@ def cal_success_reward(self, distance):
     success_reward = 0
     # 夹爪中心和目标之间距离小于一定值，则任务成功
     if self.success == True and self.step_num <= 100:
-        success_reward = 1
+        success_reward = 0
         self.terminated = True
         self.success = True
         logger.info("成功抓取！！！！！！！！！！当前阶段:%s  执行步数：%s  距离目标:%s" % (self.stage, self.step_num, distance))
@@ -28,7 +28,7 @@ def cal_success_reward(self, distance):
 
     # 机械臂执行步数过多
     if self.step_num > 100:
-        success_reward = - 1
+        success_reward = 0
         self.terminated = True
         logger.info("失败！执行步数过多！当前阶段：%s 执行步数：%s    距离目标:%s" % (self.stage, self.step_num, distance))
         self.stage = 0

@@ -35,8 +35,8 @@ test = args.test
 
 def make_env(i, env_test=False):
     def _init():
-        online = True
-        if i % 2 == 0:
+        online = False
+        if i % 4 == 0:
             print("创建测试模型", i)
             env = FR5_Env(gui=False, use_guide_model=True, guide_rate=1.0, online=online,
                           info="创建4个专家环境和4个探索环境")
@@ -65,7 +65,7 @@ if __name__ == '__main__':
         os.makedirs(checkpoints)
 
     # Instantiate the env
-    num_train = 8
+    num_train = 16
     env = SubprocVecEnv([make_env(i) for i in range(num_train)])
     # env_test = SubprocVecEnv([make_env(i, env_test=True) for i in range(num_train)])
     # env = DummyVecEnv([make_env() for i in range(num_train)])

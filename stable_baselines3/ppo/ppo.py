@@ -257,7 +257,7 @@ class PPO(OnPolicyAlgorithm):
                     entropy_loss = -th.mean(entropy)
 
                 entropy_losses.append(entropy_loss.item())
-
+                # ent_coef 0.0 vf_coef 0.5
                 loss = policy_loss + self.ent_coef * entropy_loss + self.vf_coef * value_loss
 
                 # Calculate approximate form of reverse KL Divergence for early stopping
